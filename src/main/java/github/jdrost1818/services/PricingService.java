@@ -28,7 +28,7 @@ import java.util.Date;
 public class PricingService {
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     public static final String BASE_URL = "http://www.thepricegeek.com/results/";
     public static final String NULL_URL = "http://www.thepricegeek.com/?no_results=";
@@ -36,11 +36,6 @@ public class PricingService {
 
     public static final BigDecimal NO_PRICING_DATA = new BigDecimal(-1);
 
-    public PricingService() {
-        if (itemRepository == null) {
-            itemRepository = new ItemRepository();
-        }
-    }
 
     /**
      * Public entry point to get the price of an item
@@ -75,6 +70,11 @@ public class PricingService {
      */
     private BigDecimal parsePrice(String itemQuery) {
         BigDecimal price;
+
+        // Repositories don't like null values for ids
+        if (itemQuery == null) {
+            return NO_PRICING_DATA;
+        }
 
         Item foundItem = itemRepository.findOne(itemQuery);
         if (foundItem != null && foundItem.isStillValid()) {

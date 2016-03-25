@@ -1,14 +1,18 @@
 package github.jdrost1818.services;
 
 import github.jdrost1818.ClparserServiceApplication;
+import github.jdrost1818.model.Item;
+import github.jdrost1818.repository.ItemRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -21,7 +25,11 @@ import static org.junit.Assert.assertNotEquals;
 @WebAppConfiguration
 public class TestPricingService {
 
-    private final PricingService pricingService = new PricingService();
+    @Autowired
+    private PricingService pricingService;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Before
     public void init() {
@@ -56,6 +64,33 @@ public class TestPricingService {
     @Test
     public void testGetPriceNullInput() {
         assertEquals(PricingService.NO_PRICING_DATA, pricingService.getPrice(null));
+    }
+
+    @Test
+    public void testGetPriceGetsCached() {
+        Item testItem = new Item("test");
+        testItem.setPrice(new BigDecimal("-10"));
+        testItem.setDateCached(new Date(0));
+        itemRepository.save(testItem);
+
+        // Ensure the service doesn't get a cached price
+        BigDecimal price = pricingService.getPrice(testItem.getName());
+        assertNotEquals(price, testItem.getPrice());
+
+        // Ensure the new price is cached
+        assertEquals(price, itemRepository.findOne("test").getPrice());
+    }
+
+    @Test
+    public void testGetPriceItemNotInDB() {
+        Item testItem = new Item("test");
+        testItem.setPrice(new BigDecimal("-10"));
+        testItem.setDateCached(new Date(0));
+        itemRepository.delete(testItem);
+
+        // Ensure the service doesn't get a cached price
+        BigDecimal price = pricingService.getPrice(testItem.getName());
+        assertNotEquals(price, testItem.getPrice());
     }
 
     @Test

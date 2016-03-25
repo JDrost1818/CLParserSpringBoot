@@ -1,17 +1,18 @@
 package github.jdrost1818.model.craigslist;
 
-import java.math.BigDecimal;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by JAD0911 on 3/24/2016.
  */
-/*@Entity
-@Table(name = "CRAIGSLIST_POST")*/
+@Entity
+@Table(name = "CRAIGSLIST_POST")
 public class CraigslistPost {
 
-    /*@Id
-    Column(name = "id")*/
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     private String title;
@@ -22,7 +23,7 @@ public class CraigslistPost {
     private String location;
 
     private Integer price;
-    private BigDecimal value;
+    private Integer value;
     private Date datePosted;
     private Date dateUpdated;
 
@@ -91,11 +92,11 @@ public class CraigslistPost {
         this.price = price;
     }
 
-    public BigDecimal getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(BigDecimal value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 

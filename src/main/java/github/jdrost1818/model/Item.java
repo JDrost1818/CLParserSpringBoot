@@ -3,6 +3,10 @@ package github.jdrost1818.model;
 import github.jdrost1818.config.CacheConfig;
 import github.jdrost1818.config.TimeConfig;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,18 +17,15 @@ import java.util.Date;
  * Tasked with representing items which can be bought
  * through Craigslist (or potentially any service)
  */
-/*@Entity
-@Table(name = "ITEM_CACHE")*/
+@Entity
+@Table(name = "ITEM_CACHE")
 public class Item implements Serializable {
 
-    /*@Id
-    @Column(name = "id")*/
+    @Id
+    @Column(name = "id")
     private String name;
 
-    /*@Column(name = "price")*/
     private BigDecimal price;
-
-    /*@Column(name = "date_cached")*/
     private Date dateCached;
 
     public Item() {
@@ -65,5 +66,10 @@ public class Item implements Serializable {
         }
         Date maxCacheDate = new Date(System.currentTimeMillis() - (CacheConfig.DAYS_TO_CACHE * TimeConfig.DAY_IN_MS));
         return maxCacheDate.compareTo(dateCached) <= 0;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: (%s) $%s", name, dateCached.toString(), price);
     }
 }
