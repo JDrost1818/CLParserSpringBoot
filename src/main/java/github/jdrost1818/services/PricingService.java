@@ -119,7 +119,7 @@ public class PricingService {
             //      <meta name="description" content="The price of anything is about $8.00, based on 51 historic results.">
             // If no results:
             //        <meta name="description" content="The Price Geek calculates the average price of items you see in marketplaces like eBay and Amazon, so you don't get ripped off.">
-            String description = JSoupAddOn.getMetaTag(doc, "description");
+            String description = JSoupAddOn.getMetaTag(doc, "name", "description");
             if (description != null && description.contains("$")) {
                 String priceString = description.split("\\$")[1].split(",")[0];
                 if (priceString.matches("[-+]?\\d*\\.?\\d+")) {
