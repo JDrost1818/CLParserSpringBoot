@@ -5,6 +5,11 @@ import org.springframework.data.repository.CrudRepository;
 
 /**
  * Created by JAD0911 on 3/24/2016.
+ *
+ * Repository to get and store {@link User} objects from/to the database
  */
 public interface UserRepository extends CrudRepository<User, Long> {
+
+    User findByUsername(String username);
+
 }

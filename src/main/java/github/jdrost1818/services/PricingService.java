@@ -20,7 +20,7 @@ import java.util.Date;
  *
  * Currently the only source of pricing data is:
  *
- *  https://thepricegeek.com
+ *  http://www.thepricegeek.com/
  *
  * However, further progress may be made to include other sources in addition.
  */
@@ -114,7 +114,12 @@ public class PricingService {
         BigDecimal price = NO_PRICING_DATA;
 
         if (doc != null) {
-            String description = JSoupAddOn.getMetaTag(doc, "description");
+            // For http://www.thepricegeek.com/ the price is stored in a meta tag
+            // EXAMPLE:
+            //      <meta name="description" content="The price of anything is about $8.00, based on 51 historic results.">
+            // If no results:
+            //        <meta name="description" content="The Price Geek calculates the average price of items you see in marketplaces like eBay and Amazon, so you don't get ripped off.">
+            String description = JSoupAddOn.getMetaTag(doc, "name", "description");
             if (description != null && description.contains("$")) {
                 String priceString = description.split("\\$")[1].split(",")[0];
                 if (priceString.matches("[-+]?\\d*\\.?\\d+")) {
