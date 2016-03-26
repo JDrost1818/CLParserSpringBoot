@@ -84,6 +84,16 @@ public class TestPricingService {
     }
 
     @Test
+    public void testGetPriceGetsCachedPrice() {
+        Item testItem = new Item("test");
+        testItem.setPrice(new BigDecimal("-10.00"));
+        testItem.setDateCached(new Date());
+        itemRepository.save(testItem);
+
+        assertEquals(testItem.getPrice(), pricingService.getPrice(testItem.getName()));
+    }
+
+    @Test
     public void testGetPriceItemNotInDB() {
         Item testItem = new Item("test");
         testItem.setPrice(new BigDecimal("-10"));

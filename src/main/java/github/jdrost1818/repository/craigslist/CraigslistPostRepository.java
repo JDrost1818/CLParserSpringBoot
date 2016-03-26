@@ -1,4 +1,4 @@
-package github.jdrost1818.repository;
+package github.jdrost1818.repository.craigslist;
 
 import github.jdrost1818.model.craigslist.CraigslistPost;
 import org.springframework.data.repository.CrudRepository;

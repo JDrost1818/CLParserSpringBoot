@@ -1,10 +1,10 @@
 package github.jdrost1818.services;
 
-import github.jdrost1818.data.CraigslistUrls;
+import github.jdrost1818.data.CraigslistCategory;
 import github.jdrost1818.model.User;
 import github.jdrost1818.model.craigslist.CraigslistPost;
 import github.jdrost1818.model.SearchCriteria;
-import github.jdrost1818.repository.CraigslistPostRepository;
+import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.repository.UserRepository;
 import github.jdrost1818.util.JSoupAddOn;
 import org.jsoup.nodes.Document;
@@ -105,7 +105,7 @@ public class CraigslistService {
             throw new IllegalArgumentException("Error: city argument must not be null or empty");
         }
         if (criteria.getCategory() == null || "".equals(category)) {
-            category = CraigslistUrls.ALL.all();
+            category = CraigslistCategory.ALL.all();
         }
 
         // Now that we know we can search, get the rest of the criteria

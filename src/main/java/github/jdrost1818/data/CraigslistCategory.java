@@ -1,6 +1,6 @@
 package github.jdrost1818.data;
 
-public enum CraigslistUrls {
+public enum CraigslistCategory {
 
     ALL               (new String[] {"sss", "sso", "ssq", "All"}),
     ANTIQUES          (new String[] {"ata", "atq", "atd", "Antiques"}),
@@ -47,7 +47,7 @@ public enum CraigslistUrls {
     WANTED            (new String[] {"waa", "wan", "wad", "Wanted"});
 
     private String[] urls;
-    CraigslistUrls(String[] _urls){
+    CraigslistCategory(String[] _urls){
         this.urls = _urls;
     }
 
@@ -63,14 +63,18 @@ public enum CraigslistUrls {
         return this.urls[2];
     }
 
+    public String title() {
+        return this.urls[3];
+    }
+
     public boolean contains(String key) {
-        return this.urls[0].equals(key) || this.urls[1].equals(key) || this.urls[2].equals(key);
+        return this.all().equals(key) || this.owner().equals(key) || this.dealer().equals(key);
     }
 
     public static String titleFromKey(String key) {
-        for (CraigslistUrls category : CraigslistUrls.values()) {
-            if (category.urls[0].equals(key) || category.urls[1].equals(key) || category.urls[2].equals(key)) {
-                return category.urls[3];
+        for (CraigslistCategory category : CraigslistCategory.values()) {
+            if (category.contains(key)) {
+                return category.title();
             }
         }
         return null;

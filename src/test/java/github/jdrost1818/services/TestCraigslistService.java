@@ -1,7 +1,7 @@
 package github.jdrost1818.services;
 
 import github.jdrost1818.ClparserServiceApplication;
-import github.jdrost1818.data.CraigslistUrls;
+import github.jdrost1818.data.CraigslistCategory;
 import github.jdrost1818.model.SearchCriteria;
 import github.jdrost1818.util.JSoupAddOn;
 import org.junit.Before;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 public class TestCraigslistService {
 
     @Autowired
-    CraigslistService craigslistService;
+    private CraigslistService craigslistService;
 
     private SearchCriteria fullCriteria;
 
@@ -34,7 +34,7 @@ public class TestCraigslistService {
     public void init() {
         fullCriteria = new SearchCriteria();
         fullCriteria.setId(0L);
-        fullCriteria.setCategory(CraigslistUrls.ALL.owner());
+        fullCriteria.setCategory(CraigslistCategory.ALL.owner());
         fullCriteria.setCity("minneapolis");
         fullCriteria.setExclusions("Do Not Include");
         fullCriteria.setMatch("Should Match");
@@ -65,7 +65,7 @@ public class TestCraigslistService {
         criteria.setCity(fullCriteria.getCity());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all()) + "&query=";
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all()) + "&query=";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
 
@@ -97,7 +97,7 @@ public class TestCraigslistService {
         criteria.setMinPrice(fullCriteria.getMinPrice());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&minAsk=" + fullCriteria.getMinPrice();
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -114,7 +114,7 @@ public class TestCraigslistService {
         criteria.setMaxPrice(fullCriteria.getMaxPrice());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&maxAsk=" + fullCriteria.getMaxPrice();
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -130,7 +130,7 @@ public class TestCraigslistService {
         criteria.setCity(fullCriteria.getCity());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "s=100&query=";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 100);
         assertEquals(actualUrl, expectedUrl);
@@ -147,7 +147,7 @@ public class TestCraigslistService {
         criteria.setMatch(fullCriteria.getMatch());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=" + fullCriteria.getMatch().replace(" ", "+");
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(expectedUrl, actualUrl);
@@ -164,7 +164,7 @@ public class TestCraigslistService {
         criteria.setExclusions(fullCriteria.getExclusions());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=" + fullCriteria.getExclusions().replace(" ", "+-");
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -181,7 +181,7 @@ public class TestCraigslistService {
         criteria.setSearchTitlesOnly(true);
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&srchType=T";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -198,7 +198,7 @@ public class TestCraigslistService {
         criteria.setHasPic(true);
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&hasPic=1";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -215,7 +215,7 @@ public class TestCraigslistService {
         criteria.setPostedToday(true);
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&postedToday=1";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -232,7 +232,7 @@ public class TestCraigslistService {
         criteria.setIncludeNearbyAreas(true);
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistUrls.ALL.all());
+        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&searchNearby=1";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
