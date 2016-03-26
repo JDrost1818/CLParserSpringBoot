@@ -3,7 +3,6 @@ package github.jdrost1818.services;
 import github.jdrost1818.ClparserServiceApplication;
 import github.jdrost1818.model.Item;
 import github.jdrost1818.repository.ItemRepository;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

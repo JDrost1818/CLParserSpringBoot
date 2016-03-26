@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * Created by JAD0911 on 3/24/2016.
- *
+ * <p>
  * Tasked with representing items which can be bought
  * through Craigslist (or potentially any service)
  */

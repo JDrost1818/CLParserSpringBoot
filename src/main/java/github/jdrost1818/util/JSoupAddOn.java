@@ -22,7 +22,8 @@ public interface JSoupAddOn {
                 System.out.println("Error while trying to connect to URL. Retrying");
                 try {
                     Thread.sleep(500);
-                } catch (InterruptedException ignore) {}
+                } catch (InterruptedException ignore) {
+                }
                 numTries++;
             }
         }

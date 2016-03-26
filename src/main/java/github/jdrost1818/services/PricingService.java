@@ -12,16 +12,16 @@ import java.util.Date;
 
 /**
  * Created by JAD0911 on 3/24/2016.
- *
+ * <p>
  * This class is charged with all things relating to finding the most
  * accurate price for any given item. It is in charge of caching prices
  * and making the quickest decision possible while maintaining accurate
  * information based on the current street prices of items.
- *
+ * <p>
  * Currently the only source of pricing data is:
- *
- *  http://www.thepricegeek.com/
- *
+ * <p>
+ * http://www.thepricegeek.com/
+ * <p>
  * However, further progress may be made to include other sources in addition.
  */
 @Component
@@ -62,8 +62,8 @@ public class PricingService {
 
     /**
      * Is given a query and determines the price by either:
-     *      1 - checking the cache for the item
-     *      2 - making a service call for item
+     * 1 - checking the cache for the item
+     * 2 - making a service call for item
      *
      * @param itemQuery the string representing the item we want to find the price
      * @return the market price of the item if we can find it

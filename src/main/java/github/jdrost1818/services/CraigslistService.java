@@ -1,11 +1,11 @@
 package github.jdrost1818.services;
 
 import github.jdrost1818.data.CraigslistCategory;
+import github.jdrost1818.model.SearchCriteria;
 import github.jdrost1818.model.User;
 import github.jdrost1818.model.craigslist.CraigslistPost;
-import github.jdrost1818.model.SearchCriteria;
-import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.repository.UserRepository;
+import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.util.JSoupAddOn;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * Created by JAD0911 on 3/24/2016.
- *
+ * <p>
  * This class is a simple interface for searching Craigslist and parsing search results.
  * It caches results in the database in order to limit hits on the Craigslist in order
  * to limit the number of hits on the Craigslist servers (prevents getting ip banned) and
@@ -41,8 +41,8 @@ public class CraigslistService {
     /**
      * Searches for all posts that are matched by the {@link SearchCriteria}
      * and for which the user has not seen. Terminates when either:
-     *      1 - when the search gets to posts already seen
-     *      2 - when a post > 5 days old appears - this shouldn't really happen except first run
+     * 1 - when the search gets to posts already seen
+     * 2 - when a post > 5 days old appears - this shouldn't really happen except first run
      * whichever comes first
      *
      * @param searchCriteria criteria for which to search
@@ -62,7 +62,7 @@ public class CraigslistService {
         // Iterate over whole pages
         // Gonna limit to 3 pages for right now
         while (numEntries == 100 && numAlreadyVisited < 25 && curPage < 1) {
-            String curUrl = createCraigslistUrl(searchCriteria, curPage*NUM_RESULTS_PER_PAGE);
+            String curUrl = createCraigslistUrl(searchCriteria, curPage * NUM_RESULTS_PER_PAGE);
 
             System.out.println("Scanning Page " + (++curPage) + " @ " + curUrl);
             doc = JSoupAddOn.connect(curUrl);
@@ -94,8 +94,8 @@ public class CraigslistService {
      * Transforms {@link SearchCriteria} into a valid URL to get a result page starting
      * from the the given index and on.
      *
-     * @param criteria          Criteria to use to make the url
-     * @param firstResultIndex  index of result to start from (deals with pagination)
+     * @param criteria         Criteria to use to make the url
+     * @param firstResultIndex index of result to start from (deals with pagination)
      * @return a valid Craigslist url which links to results specified by the criteria
      */
     public String createCraigslistUrl(SearchCriteria criteria, int firstResultIndex) {
