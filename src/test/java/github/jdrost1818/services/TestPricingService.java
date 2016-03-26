@@ -33,10 +33,6 @@ public class TestPricingService {
     @Autowired
     private ItemRepository itemRepository;
 
-    @Before
-    public void init() {
-    }
-
     @Test
     public void testGetPriceItemDNE() {
         assertEquals(PricingService.NO_PRICING_DATA, pricingService.getPrice("this item will not exist kfajsl;dkja;slkdlkasdf"));

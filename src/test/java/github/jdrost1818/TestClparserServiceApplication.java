@@ -15,5 +15,6 @@ public class TestClparserServiceApplication {
 
 	@Test
 	public void contextLoads() {
+		// This is intentionally left blank - just need to make sure it loads
 	}
 }

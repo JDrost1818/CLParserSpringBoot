@@ -25,6 +25,14 @@ public class CraigslistPostUserJoin {
 
     private Date dateLastAccessed;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Date getDateLastAccessed() {
         return dateLastAccessed;
     }
