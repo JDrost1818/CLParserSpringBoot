@@ -2,8 +2,14 @@ package github.jdrost1818.services;
 
 import github.jdrost1818.ClparserServiceApplication;
 import github.jdrost1818.data.CraigslistCategory;
+import github.jdrost1818.data.CraigslistConstants;
 import github.jdrost1818.model.SearchCriteria;
+import github.jdrost1818.model.craigslist.CraigslistPost;
+import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.util.JSoupAddOn;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +19,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by Jake on 3/24/2016.
@@ -28,10 +37,20 @@ public class TestCraigslistService {
     @Autowired
     private CraigslistService craigslistService;
 
+    @Autowired
+    private CraigslistPostRepository craigslistPostRepository;
+
+    private static final String CWD = System.getProperty("user.dir");
+
     private SearchCriteria fullCriteria;
+    private SearchCriteria smallResultCriteria;
+
+    private Document doc;
+    private Element postHtml;
+    private CraigslistPost post;
 
     @Before
-    public void init() {
+    public void init() throws IOException {
         fullCriteria = new SearchCriteria();
         fullCriteria.setId(0L);
         fullCriteria.setCategory(CraigslistCategory.ALL.owner());
@@ -44,15 +63,31 @@ public class TestCraigslistService {
         fullCriteria.setHasPic(true);
         fullCriteria.setSearchTitlesOnly(true);
         fullCriteria.setIncludeNearbyAreas(true);
+
+        // This will usually return ~3 pages depending on the time of day
+        // which allows for testing to not be that long for when we
+        // actually have to hit Craigslist for testing
+        smallResultCriteria = new SearchCriteria();
+        smallResultCriteria.setId(1L);
+        smallResultCriteria.setCategory(CraigslistCategory.ALL.owner());
+        smallResultCriteria.setHasPic(true);
+        smallResultCriteria.setPostedToday(true);
+        smallResultCriteria.setMatch("computer");
+
+        // This is the representation of the post found in JSoup.html
+        doc = Jsoup.parse(new File(CWD + "/src/test/java/resources/html/JSoup.html"), "UTF-8");
+        postHtml = doc.select(CraigslistConstants.POST_WRAPPER_TAG).select(CraigslistConstants.POST_TAG).get(0);
+        post = new CraigslistPost(postHtml, CraigslistConstants.getBaseUrl("minneapolis"));
+
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testCreateCraigslistUrlNullCity() {
         fullCriteria.setCity(null);
         craigslistService.createCraigslistUrl(fullCriteria, 0);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testCreateCraigslistUrlEmptyCity() {
         fullCriteria.setCity("");
         craigslistService.createCraigslistUrl(fullCriteria, 0);
@@ -65,7 +100,8 @@ public class TestCraigslistService {
         criteria.setCity(fullCriteria.getCity());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all()) + "&query=";
+
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all()) + "&query=";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
 
@@ -81,7 +117,7 @@ public class TestCraigslistService {
         criteria.setCategory(fullCriteria.getCategory());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), fullCriteria.getCategory()) + "&query=";
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), fullCriteria.getCategory()) + "&query=";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
 
@@ -97,7 +133,7 @@ public class TestCraigslistService {
         criteria.setMinPrice(fullCriteria.getMinPrice());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&minAsk=" + fullCriteria.getMinPrice();
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -114,7 +150,7 @@ public class TestCraigslistService {
         criteria.setMaxPrice(fullCriteria.getMaxPrice());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&maxAsk=" + fullCriteria.getMaxPrice();
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -130,7 +166,7 @@ public class TestCraigslistService {
         criteria.setCity(fullCriteria.getCity());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "s=100&query=";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 100);
         assertEquals(actualUrl, expectedUrl);
@@ -147,7 +183,7 @@ public class TestCraigslistService {
         criteria.setMatch(fullCriteria.getMatch());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=" + fullCriteria.getMatch().replace(" ", "+");
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(expectedUrl, actualUrl);
@@ -164,7 +200,7 @@ public class TestCraigslistService {
         criteria.setExclusions(fullCriteria.getExclusions());
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=" + fullCriteria.getExclusions().replace(" ", "+-");
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -181,7 +217,7 @@ public class TestCraigslistService {
         criteria.setSearchTitlesOnly(true);
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&srchType=T";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -198,7 +234,7 @@ public class TestCraigslistService {
         criteria.setHasPic(true);
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&hasPic=1";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -215,7 +251,7 @@ public class TestCraigslistService {
         criteria.setPostedToday(true);
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&postedToday=1";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -232,7 +268,7 @@ public class TestCraigslistService {
         criteria.setIncludeNearbyAreas(true);
 
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), CraigslistCategory.ALL.all());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), CraigslistCategory.ALL.all());
         expectedUrl += "&query=&searchNearby=1";
         String actualUrl = craigslistService.createCraigslistUrl(criteria, 0);
         assertEquals(actualUrl, expectedUrl);
@@ -244,7 +280,7 @@ public class TestCraigslistService {
     @Test
     public void testCreateCraigslistUrlAll() {
         // Ensure the url is proper
-        String expectedUrl = String.format(CraigslistService.BASE_URL, fullCriteria.getCity(), fullCriteria.getCategory());
+        String expectedUrl = CraigslistConstants.getBaseUrlSearchUrl(fullCriteria.getCity(), fullCriteria.getCategory());
         expectedUrl += String.format("s=%d&query=%s%s&minAsk=%d&maxAsk=%d&srchType=T&hasPic=1&postedToday=1&searchNearby=1",
                 100,
                 fullCriteria.getMatch().replace(" ", "+"),
@@ -258,5 +294,32 @@ public class TestCraigslistService {
         assertNotNull(JSoupAddOn.connect(actualUrl));
     }
 
+    @Test
+    public void testLoadPost() {
+        CraigslistPost foundPost = craigslistService.loadPost(postHtml, CraigslistConstants.getBaseUrl("minneapolis"));
+        assert (post.deepEquals(foundPost));
+    }
 
+    @Test
+    public void testLoadPostCacheOutOfDate() {
+        // Sets the post to outdated in db
+        Integer originalPrice = post.getPrice();
+        post.setDateCached(new Date());
+        post.setPrice(-100);
+        craigslistPostRepository.save(post);
+
+        CraigslistPost foundPost = craigslistService.loadPost(postHtml, CraigslistConstants.getBaseUrl("minneapolis"));
+
+        post.setPrice(originalPrice);
+
+        // This means that it parsed the file instead of just pulling out of db
+        assert (post.deepEquals(foundPost));
+    }
+
+    @Test
+    public void testLoadPostInvalidPost() {
+        Element illegalHtml = doc.select(CraigslistConstants.POST_WRAPPER_TAG).select(CraigslistConstants.POST_TAG).get(1);
+        CraigslistPost foundPost = craigslistService.loadPost(illegalHtml, CraigslistConstants.getBaseUrl("minneapolis"));
+        assertNull(foundPost);
+    }
 }

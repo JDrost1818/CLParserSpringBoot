@@ -59,8 +59,8 @@ public class User {
         this.seenPosts = seenPosts;
     }
 
-    public boolean hasSeenPost(CraigslistPost post) {
-        return this.seenPosts.contains(post);
+    public boolean hasSeenPost(String postId) {
+        return seenPosts.stream().anyMatch(p -> p.getId().equals(postId));
     }
 
     public String getUsername() {

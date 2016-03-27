@@ -1,7 +1,17 @@
 package github.jdrost1818.model.craigslist;
 
-import javax.persistence.*;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static github.jdrost1818.data.CraigslistConstants.ID_TAG;
 
 /**
  * Created by JAD0911 on 3/24/2016.
@@ -11,28 +21,67 @@ import java.util.Date;
 public class CraigslistPost {
 
     @Id
-    @GeneratedValue
     @Column(name = "id")
-    private Long id;
+    private String id = "";
 
-    private String title;
-    private String description;
-    private String link;
-    private String county;
-    private String category;
-    private String location;
+    private String title = "";
+    private String description = "";
+    private String link = "";
+    private String county = "";
+    private String category = "";
+    private String location = "";
 
-    private Integer price;
-    private Integer value;
-    private Date datePosted;
-    private Date dateUpdated;
+    private Integer price = -1;
+    private Integer value = -1;
+    private Date datePosted = new Date(0);
+    private Date dateUpdated = new Date(0);
+    private Date dateCached = new Date(0);
+
+    public CraigslistPost() {
+        // Need default constructor
+    }
+
+    public CraigslistPost(Element htmlElement, String baseUrl) {
+        setId(htmlElement.attr(ID_TAG));
+        if ("".equals(getId())) {
+            throw new IllegalArgumentException("Did not provide a post");
+        }
+
+        Elements priceElement = htmlElement.select("a span.price");
+        if (!priceElement.isEmpty())
+            setPrice(priceElement.text());
 
 
-    public long getId() {
+        Element detailElement = htmlElement.select("span.txt").get(0);
+        Element plElement = detailElement.select("span.pl").get(0);
+        String dateString = plElement.select("time").attr("datetime");
+        try {
+            setDateUpdated(new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(dateString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        setLink(String.format("%s%s", baseUrl, plElement.select("a").attr("href")).replace("\\\\", "\\"));
+        setTitle(plElement.select("a span#titletextonly").text());
+
+        Element l2Element = detailElement.select("span.l2").get(0);
+        String rawLocationText = l2Element.select("span.pnr").text(); // EXAMPLE - ' (Fridley) pic map'
+        String actualLocation = rawLocationText.split("\\)")[0].trim().replace("(", "");
+        setLocation(actualLocation);
+
+    }
+
+    private void setPrice(String priceString) {
+        if (!"".equals(priceString))
+            setPrice(Integer.parseInt(priceString.replace("$", "")));
+
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -114,5 +163,43 @@ public class CraigslistPost {
 
     public void setDateUpdated(Date dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Date getDateCached() {
+        return dateCached;
+    }
+
+    public void setDateCached(Date dateCached) {
+        this.dateCached = dateCached;
+    }
+
+    public boolean deepEquals(CraigslistPost otherPost) {
+        return otherPost != null
+                && getId().equals(otherPost.getId())
+                && getTitle().equals(otherPost.getTitle())
+                && getDescription().equals(otherPost.getDescription())
+                && getLink().equals(otherPost.getLink())
+                && getCounty().equals(otherPost.getCounty())
+                && getCategory().equals(otherPost.getCategory())
+                && getLocation().equals(otherPost.getLocation())
+                && getPrice().equals(otherPost.getPrice())
+                && getValue().equals(otherPost.getValue())
+                && getDatePosted().equals(otherPost.getDatePosted())
+                && getDateUpdated().equals(otherPost.getDateUpdated());
+    }
+
+    public void update(CraigslistPost post) {
+        if (post != null && getId().equals(post.getId())) {
+            setTitle(post.getTitle());
+            setDescription(post.getDescription());
+            setLink(post.getLink());
+            setCounty(post.getCounty());
+            setCategory(post.getCategory());
+            setLocation(post.getLocation());
+            setPrice(post.getPrice());
+            setValue(post.getValue());
+            setDatePosted(post.getDatePosted());
+            setDateUpdated(post.getDateUpdated());
+        }
     }
 }

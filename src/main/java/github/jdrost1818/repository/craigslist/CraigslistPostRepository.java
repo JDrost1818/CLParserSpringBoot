@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * Created by JAD0911 on 3/24/2016.
  */
-public interface CraigslistPostRepository extends CrudRepository<CraigslistPost, Long> {
+public interface CraigslistPostRepository extends CrudRepository<CraigslistPost, String> {
 }
 
