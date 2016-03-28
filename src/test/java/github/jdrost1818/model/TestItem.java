@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -14,7 +15,7 @@ public class TestItem {
     @Test
     public void testIsValidNullCacheDate() {
         Item item = new Item();
-        assertTrue(!item.isStillValid());
+        assertFalse(item.isStillValid());
     }
 
     @Test
@@ -28,6 +29,6 @@ public class TestItem {
     public void testIsValidNotValid() {
         Item item = new Item();
         item.setDateCached(new Date(0));
-        assertTrue(!item.isStillValid());
+        assertFalse(item.isStillValid());
     }
 }

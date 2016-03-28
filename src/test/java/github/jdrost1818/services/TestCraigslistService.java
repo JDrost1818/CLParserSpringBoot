@@ -368,7 +368,7 @@ public class TestCraigslistService {
     @Test
     public void testSearch() {
         List<CraigslistPost> foundPosts = craigslistService.search(smallResultCriteria, new Date(0));
-        assertTrue(!foundPosts.isEmpty());
+        assertFalse(foundPosts.isEmpty());
     }
 
     @Test

@@ -2,9 +2,7 @@ package github.jdrost1818.data;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by Jake on 3/25/2016.
@@ -21,7 +19,7 @@ public class TestCraigslistCategory {
 
     @Test
     public void testContainsDoesNotContain() {
-        assertTrue(!CraigslistCategory.ALL.contains("this is random"));
+        assertFalse(CraigslistCategory.ALL.contains("this is random"));
     }
 
     @Test
