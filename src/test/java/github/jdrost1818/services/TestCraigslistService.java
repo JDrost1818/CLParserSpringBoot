@@ -22,6 +22,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -45,6 +46,7 @@ public class TestCraigslistService {
     private SearchCriteria fullCriteria;
     private SearchCriteria smallResultCriteria;
 
+    private String baseUrl;
     private Document doc;
     private Element postHtml;
     private CraigslistPost post;
@@ -69,16 +71,17 @@ public class TestCraigslistService {
         // actually have to hit Craigslist for testing
         smallResultCriteria = new SearchCriteria();
         smallResultCriteria.setId(1L);
+        smallResultCriteria.setCity("minneapolis");
         smallResultCriteria.setCategory(CraigslistCategory.ALL.owner());
         smallResultCriteria.setHasPic(true);
         smallResultCriteria.setPostedToday(true);
         smallResultCriteria.setMatch("computer");
 
         // This is the representation of the post found in JSoup.html
+        baseUrl = CraigslistConstants.getBaseUrl("minneapolis");
         doc = Jsoup.parse(new File(CWD + "/src/test/java/resources/html/JSoup.html"), "UTF-8");
         postHtml = doc.select(CraigslistConstants.POST_WRAPPER_TAG).select(CraigslistConstants.POST_TAG).get(0);
-        post = new CraigslistPost(postHtml, CraigslistConstants.getBaseUrl("minneapolis"));
-
+        post = new CraigslistPost(postHtml, baseUrl);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -296,7 +299,7 @@ public class TestCraigslistService {
 
     @Test
     public void testLoadPost() {
-        CraigslistPost foundPost = craigslistService.loadPost(postHtml, CraigslistConstants.getBaseUrl("minneapolis"));
+        CraigslistPost foundPost = craigslistService.loadPost(postHtml, baseUrl);
         assert (post.deepEquals(foundPost));
     }
 
@@ -308,7 +311,7 @@ public class TestCraigslistService {
         post.setPrice(-100);
         craigslistPostRepository.save(post);
 
-        CraigslistPost foundPost = craigslistService.loadPost(postHtml, CraigslistConstants.getBaseUrl("minneapolis"));
+        CraigslistPost foundPost = craigslistService.loadPost(postHtml, baseUrl);
 
         post.setPrice(originalPrice);
 
@@ -319,7 +322,58 @@ public class TestCraigslistService {
     @Test
     public void testLoadPostInvalidPost() {
         Element illegalHtml = doc.select(CraigslistConstants.POST_WRAPPER_TAG).select(CraigslistConstants.POST_TAG).get(1);
-        CraigslistPost foundPost = craigslistService.loadPost(illegalHtml, CraigslistConstants.getBaseUrl("minneapolis"));
+        CraigslistPost foundPost = craigslistService.loadPost(illegalHtml, baseUrl);
         assertNull(foundPost);
+    }
+
+    @Test
+    public void testParsePageAllNull() {
+        List<CraigslistPost> foundPosts = craigslistService.parsePage(null, null, null);
+        assertEquals(0, foundPosts.size());
+    }
+
+    @Test
+    public void testParsePageDateNull() {
+        List<CraigslistPost> foundPosts = craigslistService.parsePage(null, doc, baseUrl);
+        // This ensures it parses correctly but
+        // also that doesn't add malformed posts
+        assertEquals(1, foundPosts.size());
+        assert (foundPosts.get(0).deepEquals(post));
+    }
+
+    @Test
+    public void testParsePageDocNull() {
+        List<CraigslistPost> foundPosts = craigslistService.parsePage(new Date(0), null, baseUrl);
+        assertEquals(0, foundPosts.size());
+    }
+
+    @Test
+    public void testParsePageBaseUrlNull() {
+        List<CraigslistPost> foundPosts = craigslistService.parsePage(new Date(0), doc, null);
+        assertEquals(1, foundPosts.size());
+    }
+
+    @Test
+    public void testParsePageNoNewPosts() {
+        List<CraigslistPost> foundPosts = craigslistService.parsePage(new Date(), doc, baseUrl);
+        assertEquals(0, foundPosts.size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSearchCityNull() {
+        smallResultCriteria.setCity(null);
+        craigslistService.search(smallResultCriteria, new Date(0));
+    }
+
+    @Test
+    public void testSearch() {
+        List<CraigslistPost> foundPosts = craigslistService.search(smallResultCriteria, new Date(0));
+        assert(!foundPosts.isEmpty());
+    }
+
+    @Test
+    public void testSearchNulls() {
+        List<CraigslistPost> foundPosts = craigslistService.search(null, null);
+        assertEquals(0, foundPosts.size());
     }
 }

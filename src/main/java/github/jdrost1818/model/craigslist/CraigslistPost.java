@@ -1,5 +1,6 @@
 package github.jdrost1818.model.craigslist;
 
+import org.hibernate.validator.constraints.Length;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -25,6 +26,7 @@ public class CraigslistPost {
     private String id = "";
 
     private String title = "";
+    @Column(length = 10000)
     private String description = "";
     private String link = "";
     private String county = "";

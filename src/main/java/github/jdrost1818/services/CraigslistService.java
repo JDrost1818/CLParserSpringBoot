@@ -7,6 +7,7 @@ import github.jdrost1818.model.User;
 import github.jdrost1818.model.craigslist.CraigslistPost;
 import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.util.JSoupAddOn;
+import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -16,8 +17,10 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static github.jdrost1818.data.CraigslistConstants.*;
 
@@ -35,52 +38,66 @@ public class CraigslistService {
     @Autowired
     private CraigslistPostRepository craigslistPostRepository;
 
+    private static final Logger logger = Logger.getLogger(CraigslistService.class);
+
     /**
      * Searches for all posts that are matched by the {@link SearchCriteria}
      * and for which the user has not seen. Terminates when either:
-     * 1 - when the search gets to posts already seen
-     * 2 - when a post > 5 days old appears - this shouldn't really happen except first run
-     * whichever comes first
+     *      1 - when the last page is reached
+     *      2 - when posts are found older than the earliestDate
      *
      * @param searchCriteria criteria for which to search
-     * @param user           user that is making the search
+     * @param earliestDate   the farthest date back which we will accept a post as new
      * @return list of all posts that meet the criteria and have not been seen by the user
      */
-    public List<CraigslistPost> search(SearchCriteria searchCriteria, User user) {
+    public List<CraigslistPost> search(SearchCriteria searchCriteria, Date earliestDate) {
         List<CraigslistPost> newPosts = new ArrayList<>();
         List<CraigslistPost> postsFromPage;
         Document doc;
 
-        int curPage = 0;
-        int numNewPostsFoundOnPage = NUM_RESULTS_PER_PAGE;
-        String baseUrl = CraigslistConstants.getBaseUrl(searchCriteria.getCity());
+        if (searchCriteria != null) {
+            int curPage = 0;
+            int numNewPostsFoundOnPage = NUM_RESULTS_PER_PAGE;
+            String baseUrl = CraigslistConstants.getBaseUrl(searchCriteria.getCity());
 
-        // Iterate over whole pages
-        while (numNewPostsFoundOnPage == NUM_RESULTS_PER_PAGE) {
-            String curUrl = createCraigslistUrl(searchCriteria, ++curPage * NUM_RESULTS_PER_PAGE);
-            doc = JSoupAddOn.connect(curUrl);
+            // Iterate over whole pages
+            while (numNewPostsFoundOnPage == NUM_RESULTS_PER_PAGE) {
+                String curUrl = createCraigslistUrl(searchCriteria, ++curPage * NUM_RESULTS_PER_PAGE);
+                doc = JSoupAddOn.connect(curUrl);
 
-            postsFromPage = parsePage(user, doc, baseUrl);
-            numNewPostsFoundOnPage = postsFromPage.size();
-            newPosts.addAll(postsFromPage);
+                postsFromPage = parsePage(earliestDate, doc, baseUrl);
+                numNewPostsFoundOnPage = postsFromPage.size();
+                newPosts.addAll(postsFromPage);
+            }
         }
+
         return newPosts;
     }
 
-    public List<CraigslistPost> parsePage(User user, Document doc, String baseUrl) {
+    /**
+     * Takes in a page and returns all posts that have been created
+     * or updated since the date given
+     *
+     * @param earliestDate   the farthest date back which we will accept a post as new
+     * @param doc            the html element to parse
+     * @param baseUrl        the domain of Craigslist - this changes based on city
+     * @return all posts created since the date provided
+     */
+    public List<CraigslistPost> parsePage(Date earliestDate, Document doc, String baseUrl) {
         List<CraigslistPost> posts = new ArrayList<>();
 
         if (doc != null) {
             // Gets the container which has the actual posts
-            Elements allPosts = doc.select(POST_WRAPPER_TAG).select(POST_TAG);
+            Elements allPosts = doc.select(POSTS_TAG);
 
             // Adds all posts the user hasn't seen to the returned list
             allPosts.stream()
-                    .filter(html -> !user.hasSeenPost(html.attr(ID_TAG)))
                     .forEach(html -> posts.add(loadPost(html, baseUrl)));
         }
 
-        return posts;
+        return posts.stream()
+                .filter(post -> post != null && (earliestDate == null || post.getDateUpdated().after(earliestDate)))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -99,7 +116,7 @@ public class CraigslistService {
         try {
             dateUpdated = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(html.select("time").attr("datetime"));
         } catch (ParseException e) {
-            System.out.println("Could not parse date - invalid post format");
+            logger.error("Could not parse date - invalid post format");
             return post;
         }
 

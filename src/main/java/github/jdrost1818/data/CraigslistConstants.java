@@ -12,6 +12,7 @@ public class CraigslistConstants {
 
     public static final String POST_WRAPPER_TAG = "div.content";
     public static final String POST_TAG = "p.row";
+    public static final String POSTS_TAG = POST_WRAPPER_TAG + " " + POST_TAG;
     public static final String ID_TAG = "data-pid";
 
     public static String getBaseUrl(String city) {
