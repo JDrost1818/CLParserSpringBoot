@@ -1,6 +1,5 @@
 package github.jdrost1818.services;
 
-import github.jdrost1818.data.CraigslistConstants;
 import github.jdrost1818.model.SearchCriteria;
 import github.jdrost1818.model.craigslist.CraigslistPost;
 import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
@@ -151,7 +150,7 @@ public class CraigslistService {
             exclu = "+-" + exclu;
 
         return String.format("%ss=%s&query=%s%s&min_price=%s&max_price=%s&srchType=%s&hasPic=%s&postedToday=%s&searchNearby=%s",
-                CraigslistConstants.getBaseUrlSearchUrl(city, category),
+                getBaseUrlSearchUrl(city, category),
                 StringUtil.conditionalFormat(firstResultIndex > 0, Integer.toString(firstResultIndex), ""),
                 match,
                 exclu,
