@@ -1,11 +1,7 @@
 package github.jdrost1818.model;
 
-import github.jdrost1818.model.craigslist.CraigslistPost;
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by JAD0911 on 3/24/2016.
@@ -27,9 +23,6 @@ public class User {
     private String password;
 
     private Date lastParseTime = new Date(0);
-
-    @Transient
-    private List<CraigslistPost> seenPosts;
 
     public Long getId() {
         return id;
@@ -53,40 +46,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public List<CraigslistPost> getSeenPosts() {
-        return seenPosts;
-    }
-
-    public void setSeenPosts(List<CraigslistPost> seenPosts) {
-        this.seenPosts = seenPosts;
-    }
-
-    public boolean hasSeenPost(String id, Date dateUpdated) {
-        for (CraigslistPost seenPost : seenPosts) {
-            if (seenPost.getId().equals(id)) {
-                return dateUpdated.after(getLastParseTime());
-            }
-        }
-        return false;
-    }
-
-    public void addSeenPost(CraigslistPost newPost) {
-        if (seenPosts == null) {
-            seenPosts = new ArrayList<>();
-        }
-        if (seenPosts.stream().noneMatch(post -> post.getId().equals(newPost.getId()))) {
-            seenPosts.add(newPost);
-        }
-    }
-
-    public void addSeenPosts(List<CraigslistPost> newPosts) {
-        if (seenPosts == null) {
-            seenPosts = newPosts;
-        } else {
-            seenPosts.addAll(newPosts);
-        }
     }
 
     public String getUsername() {

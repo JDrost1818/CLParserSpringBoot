@@ -15,11 +15,24 @@ public class CraigslistConstants {
     public static final String POSTS_TAG = POST_WRAPPER_TAG + " " + POST_TAG;
     public static final String ID_TAG = "data-pid";
 
+    private CraigslistConstants() {
+        // Prevent instantiation
+    }
+
     public static String getBaseUrl(String city) {
+        if (city == null || "".equals(city)) {
+            throw new IllegalArgumentException("Error: city argument must not be null or empty");
+        }
         return String.format(BASE_URL, city);
     }
 
     public static String getBaseUrlSearchUrl(String city, String cat) {
+        if (city == null || "".equals(city)) {
+            throw new IllegalArgumentException("Error: city argument must not be null or empty");
+        }
+        if (cat == null || "".equals(cat)) {
+            return String.format(BASE_URL_SEARCH_URL, city, CraigslistCategory.ALL.all());
+        }
         return String.format(BASE_URL_SEARCH_URL, city, cat);
     }
 }

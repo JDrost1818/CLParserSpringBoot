@@ -1,10 +1,11 @@
 package github.jdrost1818.services;
 
-import github.jdrost1818.data.CraigslistCategory;
+import github.jdrost1818.data.CraigslistConstants;
 import github.jdrost1818.model.SearchCriteria;
 import github.jdrost1818.model.craigslist.CraigslistPost;
 import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.util.JSoupAddOn;
+import github.jdrost1818.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -40,8 +41,8 @@ public class CraigslistService {
     /**
      * Searches for all posts that are matched by the {@link SearchCriteria}
      * and for which the user has not seen. Terminates when either:
-     *      1 - when the last page is reached
-     *      2 - when posts are found older than the earliestDate
+     * 1 - when the last page is reached
+     * 2 - when posts are found older than the earliestDate
      *
      * @param searchCriteria criteria for which to search
      * @param earliestDate   the farthest date back which we will accept a post as new
@@ -75,9 +76,9 @@ public class CraigslistService {
      * Takes in a page and returns all posts that have been created
      * or updated since the date given
      *
-     * @param earliestDate   the farthest date back which we will accept a post as new
-     * @param doc            the html element to parse
-     * @param baseUrl        the domain of Craigslist - this changes based on city
+     * @param earliestDate the farthest date back which we will accept a post as new
+     * @param doc          the html element to parse
+     * @param baseUrl      the domain of Craigslist - this changes based on city
      * @return all posts created since the date provided
      */
     public List<CraigslistPost> parsePage(Date earliestDate, Document doc, String baseUrl) {
@@ -142,46 +143,24 @@ public class CraigslistService {
     public String createCraigslistUrl(SearchCriteria criteria, int firstResultIndex) {
         String city = criteria.getCity();
         String category = criteria.getCategory();
-        if (city == null || "".equals(city)) {
-            throw new IllegalArgumentException("Error: city argument must not be null or empty");
-        }
-        if (criteria.getCategory() == null || "".equals(category)) {
-            category = CraigslistCategory.ALL.all();
-        }
-
-        // Now that we know we can search, get the rest of the criteria
         Integer minPrice = criteria.getMinPrice();
         Integer maxPrice = criteria.getMaxPrice();
-        String match = (criteria.getMatch() != null) ? criteria.getMatch() : "";
-        String exclu = (criteria.getExclusions() != null) ? criteria.getExclusions() : "";
+        String match = StringUtil.format(criteria.getMatch(), "").replace(" ", "+");
+        String exclu = StringUtil.format(criteria.getExclusions(), "").replace(" ", "+-");
+        if (!"".equals(exclu))
+            exclu = "+-" + exclu;
 
-        // Creates the query aspect of the url
-        StringBuilder url = new StringBuilder(getBaseUrlSearchUrl(city, category));
-        if (firstResultIndex > 0)
-            url.append("s=").append(firstResultIndex);
-        url.append("&query=");
-        url.append(match.replace(" ", "+"));
-        url.append(exclu.replace(" ", "+-"));
-
-        // Add the price restrictions if they exist
-        if (minPrice != null) {
-            url.append("&minAsk=").append(minPrice);
-        }
-        if (maxPrice != null) {
-            url.append("&maxAsk=").append(maxPrice);
-        }
-
-        // Add the boolean flags
-        if (criteria.isSearchTitlesOnly())
-            url.append("&srchType=T");
-        if (criteria.isHasPic())
-            url.append("&hasPic=1");
-        if (criteria.isPostedToday())
-            url.append("&postedToday=1");
-        if (criteria.isIncludeNearbyAreas())
-            url.append("&searchNearby=1");
-
-        return url.toString();
+        return String.format("%ss=%s&query=%s%s&min_price=%s&max_price=%s&srchType=%s&hasPic=%s&postedToday=%s&searchNearby=%s",
+                CraigslistConstants.getBaseUrlSearchUrl(city, category),
+                StringUtil.conditionalFormat(firstResultIndex > 0, Integer.toString(firstResultIndex), ""),
+                match,
+                exclu,
+                StringUtil.format(minPrice, ""),
+                StringUtil.format(maxPrice, ""),
+                StringUtil.conditionalFormat(criteria.isSearchTitlesOnly(), "T", ""),
+                StringUtil.conditionalFormat(criteria.isHasPic(), "1", ""),
+                StringUtil.conditionalFormat(criteria.isPostedToday(), "1", ""),
+                StringUtil.conditionalFormat(criteria.isIncludeNearbyAreas(), "1", ""));
     }
 
 }

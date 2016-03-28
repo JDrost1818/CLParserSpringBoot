@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by JAD0911 on 3/24/2016.
  */
 @Entity
-@Table(name = "CRAIGSLIST_SEARCH_CRITERIA")
+@Table(name = "SEARCH_CRITERIA")
 public class SearchCriteria {
 
     @Id

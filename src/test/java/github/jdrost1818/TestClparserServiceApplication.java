@@ -13,8 +13,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ActiveProfiles("test")
 public class TestClparserServiceApplication {
 
-	@Test
-	public void contextLoads() {
-		// This is intentionally left blank - just need to make sure it loads
-	}
+    @Test
+    public void contextLoads() {
+        ClparserServiceApplication.main(new String[]{});
+    }
 }
