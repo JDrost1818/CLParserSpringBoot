@@ -2,6 +2,7 @@ package github.jdrost1818.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by Jake on 3/28/2016.
@@ -16,7 +17,10 @@ public class StringUtil {
         if (obj == null) {
             return defaultString;
         } else if (obj instanceof Date) {
-            return new SimpleDateFormat("MM/dd/yyyy").format((Date) obj);
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            return formatter.format((Date) obj);
         } else {
             return obj.toString();
         }

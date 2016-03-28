@@ -25,8 +25,8 @@ public class TestStringUtil {
 
     @Test
     public void testFormatStringDate() {
-        Date date = new Date(0); // Wed Dec 31 18:00:00 CST 1969
-        assertEquals("12/31/1969", StringUtil.format(date, ""));
+        Date date = new Date(0);
+        assertEquals("01/01/1970", StringUtil.format(date, ""));
     }
 
     @Test
