@@ -1,7 +1,6 @@
 package github.jdrost1818.services;
 
 import github.jdrost1818.data.CraigslistCategory;
-import github.jdrost1818.data.CraigslistConstants;
 import github.jdrost1818.model.SearchCriteria;
 import github.jdrost1818.model.craigslist.CraigslistPost;
 import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
@@ -157,7 +156,7 @@ public class CraigslistService {
         String exclu = (criteria.getExclusions() != null) ? criteria.getExclusions() : "";
 
         // Creates the query aspect of the url
-        StringBuilder url = new StringBuilder(CraigslistConstants.getBaseUrlSearchUrl(city, category));
+        StringBuilder url = new StringBuilder(getBaseUrlSearchUrl(city, category));
         if (firstResultIndex > 0)
             url.append("s=").append(firstResultIndex);
         url.append("&query=");

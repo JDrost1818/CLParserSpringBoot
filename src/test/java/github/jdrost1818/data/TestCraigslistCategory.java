@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Jake on 3/25/2016.
@@ -13,14 +14,14 @@ public class TestCraigslistCategory {
     @Test
     public void testContains() {
         CraigslistCategory category = CraigslistCategory.ALL;
-        assert(category.contains(category.all()));
-        assert(category.contains(category.dealer()));
-        assert(category.contains(category.owner()));
+        assertTrue(category.contains(category.all()));
+        assertTrue(category.contains(category.dealer()));
+        assertTrue(category.contains(category.owner()));
     }
 
     @Test
     public void testContainsDoesNotContain() {
-        assert(!CraigslistCategory.ALL.contains("this is random"));
+        assertTrue(!CraigslistCategory.ALL.contains("this is random"));
     }
 
     @Test

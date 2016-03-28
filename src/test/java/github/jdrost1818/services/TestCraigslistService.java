@@ -300,7 +300,7 @@ public class TestCraigslistService {
     @Test
     public void testLoadPost() {
         CraigslistPost foundPost = craigslistService.loadPost(postHtml, baseUrl);
-        assert (post.deepEquals(foundPost));
+        assertTrue(post.deepEquals(foundPost));
     }
 
     @Test
@@ -316,7 +316,7 @@ public class TestCraigslistService {
         post.setPrice(originalPrice);
 
         // This means that it parsed the file instead of just pulling out of db
-        assert (post.deepEquals(foundPost));
+        assertTrue(post.deepEquals(foundPost));
     }
 
     @Test
@@ -338,7 +338,7 @@ public class TestCraigslistService {
         // This ensures it parses correctly but
         // also that doesn't add malformed posts
         assertEquals(1, foundPosts.size());
-        assert (foundPosts.get(0).deepEquals(post));
+        assertTrue(foundPosts.get(0).deepEquals(post));
     }
 
     @Test
@@ -368,7 +368,7 @@ public class TestCraigslistService {
     @Test
     public void testSearch() {
         List<CraigslistPost> foundPosts = craigslistService.search(smallResultCriteria, new Date(0));
-        assert(!foundPosts.isEmpty());
+        assertTrue(!foundPosts.isEmpty());
     }
 
     @Test

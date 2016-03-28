@@ -1,6 +1,5 @@
 package github.jdrost1818.model.craigslist;
 
-import org.hibernate.validator.constraints.Length;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
