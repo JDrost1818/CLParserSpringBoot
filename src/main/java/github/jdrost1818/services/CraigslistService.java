@@ -3,7 +3,6 @@ package github.jdrost1818.services;
 import github.jdrost1818.data.CraigslistCategory;
 import github.jdrost1818.data.CraigslistConstants;
 import github.jdrost1818.model.SearchCriteria;
-import github.jdrost1818.model.User;
 import github.jdrost1818.model.craigslist.CraigslistPost;
 import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.util.JSoupAddOn;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +56,7 @@ public class CraigslistService {
         if (searchCriteria != null) {
             int curPage = 0;
             int numNewPostsFoundOnPage = NUM_RESULTS_PER_PAGE;
-            String baseUrl = CraigslistConstants.getBaseUrl(searchCriteria.getCity());
+            String baseUrl = getBaseUrl(searchCriteria.getCity());
 
             // Iterate over whole pages
             while (numNewPostsFoundOnPage == NUM_RESULTS_PER_PAGE) {
