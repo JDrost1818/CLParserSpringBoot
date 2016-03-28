@@ -38,6 +38,6 @@ public class TestStringUtil {
     @Test
     public void testConditionalFormatFalse() {
         String truthString = "da not truth";
-        assertEquals(truthString, StringUtil.conditionalFormat(true, "", truthString));
+        assertEquals(truthString, StringUtil.conditionalFormat(false, "", truthString));
     }
 }
