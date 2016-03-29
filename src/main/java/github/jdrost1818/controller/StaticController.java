@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class StaticController {
 
-    private final String HOME = "index";
+    private static final String HOME = "index";
 
     @RequestMapping("/")
     public String home() {

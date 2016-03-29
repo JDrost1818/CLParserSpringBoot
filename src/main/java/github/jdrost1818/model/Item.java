@@ -1,7 +1,7 @@
 package github.jdrost1818.model;
 
 import github.jdrost1818.config.CacheConfig;
-import github.jdrost1818.config.TimeConfig;
+import github.jdrost1818.util.DateUtil;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +33,7 @@ public class Item implements Serializable {
     }
 
     public Item(String name) {
-        this.name = name;
+        setName(name);
     }
 
     public String getName() {
@@ -61,15 +61,10 @@ public class Item implements Serializable {
     }
 
     public boolean isStillValid() {
-        if (dateCached == null) {
+        if (getDateCached() == null) {
             return false;
         }
-        Date maxCacheDate = new Date(System.currentTimeMillis() - (CacheConfig.DAYS_TO_CACHE * TimeConfig.DAY_IN_MS));
-        return maxCacheDate.compareTo(dateCached) <= 0;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s: (%s) $%s", name, dateCached.toString(), price);
+        Date oldestValidCacheDate = DateUtil.getXDaysAgo(CacheConfig.DAYS_TO_CACHE);
+        return oldestValidCacheDate.before(getDateCached());
     }
 }

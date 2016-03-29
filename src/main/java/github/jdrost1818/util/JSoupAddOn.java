@@ -14,7 +14,7 @@ import java.io.IOException;
  *
  * Created by JAD0911 on 3/24/2016.
  */
-public class JSoupAddOn {
+public final class JSoupAddOn {
 
     private static final Logger logger = Logger.getLogger(JSoupAddOn.class);
 

@@ -3,7 +3,7 @@ package github.jdrost1818.data;
 /**
  * Created by Jake on 3/26/2016.
  */
-public class CraigslistConstants {
+public final class CraigslistConstants {
 
     private static final String BASE_URL = "https://%s.craigslist.org/";
     private static final String BASE_URL_SEARCH_URL = "https://%s.craigslist.org/search/%s?";
