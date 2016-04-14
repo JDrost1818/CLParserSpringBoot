@@ -11,18 +11,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * Created by JAD0911 on 3/24/2016.
- * <p>
  * This class is charged with all things relating to finding the most
  * accurate price for any given item. It is in charge of caching prices
  * and making the quickest decision possible while maintaining accurate
  * information based on the current street prices of items.
- * <p>
+ *
  * Currently the only source of pricing data is:
- * <p>
+ *
  * http://www.thepricegeek.com/
- * <p>
+ *
  * However, further progress may be made to include other sources in addition.
+ *
+ * Created by JAD0911 on 3/24/2016.
  */
 @Component
 public class PricingService {
@@ -34,7 +34,7 @@ public class PricingService {
     public static final String NULL_URL = "http://www.thepricegeek.com/?no_results=";
     public static final String URL_SUFFIX = "?country=us";
 
-    public static final BigDecimal NO_PRICING_DATA = new BigDecimal(-1);
+    public static final BigDecimal NO_PRICING_DATA = BigDecimal.valueOf(-1);
 
 
     /**

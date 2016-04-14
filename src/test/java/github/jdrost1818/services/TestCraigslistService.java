@@ -81,7 +81,7 @@ public class TestCraigslistService {
         baseUrl = CraigslistConstants.getBaseUrl("minneapolis");
         doc = Jsoup.parse(new File(CWD + "/src/test/java/resources/html/JSoup.html"), "UTF-8");
         postHtml = doc.select(CraigslistConstants.POST_WRAPPER_TAG).select(CraigslistConstants.POST_TAG).get(0);
-        post = new CraigslistPost(postHtml, baseUrl);
+        post = CraigslistPost.parsePost(postHtml, baseUrl);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -134,7 +134,7 @@ public class TestCraigslistService {
     public void testLoadPostCacheOutOfDate() {
         // Sets the post to outdated in db
         Integer originalPrice = post.getPrice();
-        post.setDateCached(new Date());
+        post.setDateCached(new Date(0));
         post.setPrice(-100);
         craigslistPostRepository.save(post);
 

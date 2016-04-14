@@ -22,6 +22,15 @@ public final class JSoupAddOn {
         // Prevent instantiation
     }
 
+    /**
+     * Connects to a website using JSoup. This makes it easier to connect
+     * in code rather than having to deal with the try catch. It also
+     * retries to connect before giving up. This ensures the URL is malformed
+     * or the site is down, not just a fluke - which has happened with this library.
+     *
+     * @param url connection string to website to connect to
+     * @return the document of the website, or null if cannot connect
+     */
     public static Document connect(String url) {
         Document doc = null;
         int numTries = 0;

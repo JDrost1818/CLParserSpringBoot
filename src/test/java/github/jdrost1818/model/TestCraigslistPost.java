@@ -35,7 +35,7 @@ public class TestCraigslistPost {
 
         Document doc = Jsoup.parse(new File(CWD + "/src/test/java/resources/html/JSoup.html"), "UTF-8");
         Element postHtml = doc.select(CraigslistConstants.POST_WRAPPER_TAG).select(CraigslistConstants.POST_TAG).get(0);
-        CraigslistPost post = new CraigslistPost(postHtml, BASE_URL);
+        CraigslistPost post = CraigslistPost.parsePost(postHtml, BASE_URL);
 
         assertEquals(id, post.getId());
         assertEquals(price, post.getPrice());

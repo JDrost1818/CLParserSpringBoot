@@ -1,5 +1,6 @@
 package github.jdrost1818.model.craigslist;
 
+import org.apache.log4j.Logger;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -20,6 +21,8 @@ import static github.jdrost1818.data.CraigslistConstants.ID_TAG;
 @Table(name = "CRAIGSLIST_POST")
 public class CraigslistPost {
 
+    private static final Logger logger = Logger.getLogger(CraigslistPost.class);
+
     @Id
     @Column(name = "id")
     private String id = "";
@@ -38,44 +41,42 @@ public class CraigslistPost {
     private Date dateUpdated = new Date(0);
     private Date dateCached = new Date(0);
 
-    public CraigslistPost() {
-        // Need default constructor
-    }
+    public static CraigslistPost parsePost(Element htmlElement, String baseUrl) {
+        CraigslistPost newPost = new CraigslistPost();
 
-    public CraigslistPost(Element htmlElement, String baseUrl) {
-        setId(htmlElement.attr(ID_TAG));
-        if ("".equals(getId())) {
+        newPost.setId(htmlElement.attr(ID_TAG));
+        if ("".equals(newPost.getId())) {
             throw new IllegalArgumentException("Did not provide a post");
         }
 
         Elements priceElement = htmlElement.select("a span.price");
         if (!priceElement.isEmpty())
-            setPrice(priceElement.text());
+            newPost.setPrice(priceElement.text());
 
 
         Element detailElement = htmlElement.select("span.txt").get(0);
         Element plElement = detailElement.select("span.pl").get(0);
         String dateString = plElement.select("time").attr("datetime");
         try {
-            setDateUpdated(new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(dateString));
+            newPost.setDateUpdated(new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(dateString));
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("Malformed Date Found In Craigslist Post - (" + dateString + ")", e);
         }
 
-        setLink(String.format("%s%s", baseUrl, plElement.select("a").attr("href")).replace("\\\\", "\\"));
-        setTitle(plElement.select("a span#titletextonly").text());
+        newPost.setLink(String.format("%s%s", baseUrl, plElement.select("a").attr("href")).replace("\\\\", "\\"));
+        newPost.setTitle(plElement.select("a span#titletextonly").text());
 
         Element l2Element = detailElement.select("span.l2").get(0);
         String rawLocationText = l2Element.select("span.pnr").text(); // EXAMPLE - ' (Fridley) pic map'
         String actualLocation = rawLocationText.split("\\)")[0].trim().replace("(", "");
-        setLocation(actualLocation);
+        newPost.setLocation(actualLocation);
 
+        return newPost;
     }
 
     private void setPrice(String priceString) {
         if (!"".equals(priceString))
             setPrice(Integer.parseInt(priceString.replace("$", "")));
-
     }
 
     public String getId() {
@@ -151,7 +152,7 @@ public class CraigslistPost {
     }
 
     public Date getDatePosted() {
-        return datePosted;
+        return new Date(datePosted.getTime());
     }
 
     public void setDatePosted(Date datePosted) {
@@ -159,7 +160,7 @@ public class CraigslistPost {
     }
 
     public Date getDateUpdated() {
-        return dateUpdated;
+        return new Date(dateUpdated.getTime());
     }
 
     public void setDateUpdated(Date dateUpdated) {
@@ -167,7 +168,7 @@ public class CraigslistPost {
     }
 
     public Date getDateCached() {
-        return dateCached;
+        return new Date(dateCached.getTime());
     }
 
     public void setDateCached(Date dateCached) {

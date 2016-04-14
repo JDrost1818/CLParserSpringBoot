@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 import static github.jdrost1818.data.CraigslistConstants.*;
 
 /**
- * Created by JAD0911 on 3/24/2016.
- * <p>
  * This class is a simple interface for searching Craigslist and parsing search results.
  * It caches results in the database in order to limit hits on the Craigslist in order
  * to limit the number of hits on the Craigslist servers (prevents getting ip banned) and
  * to achieve performance gains.
+ *
+ * Created by JAD0911 on 3/24/2016.
  */
 @Component
 public class CraigslistService {
@@ -120,9 +120,9 @@ public class CraigslistService {
         // This means the post has not already been found
         // so we need to create it and save it in the db
         if (post == null) {
-            post = new CraigslistPost(html, baseUrl);
-        } else if (post.getDateCached().compareTo(dateUpdated) > 0) {
-            post.update(new CraigslistPost(html, baseUrl));
+            post = CraigslistPost.parsePost(html, baseUrl);
+        } else if (post.getDateCached().before(dateUpdated)) {
+            post.update(CraigslistPost.parsePost(html, baseUrl));
         }
 
         post.setDateCached(new Date());
