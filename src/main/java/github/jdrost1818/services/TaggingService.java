@@ -31,7 +31,7 @@ public class TaggingService {
      * @return list of tags which have a relation in the words
      */
     public List<Tag> getTags(String words) {
-        String[] wordList = words.split(" ");
+        String[] wordList = words.toLowerCase().split(" ");
         List<Tag> tagList = new ArrayList<>();
         for (String word : wordList) {
             TagRelation foundTag = tagRelationRepository.findOne(word);
@@ -69,6 +69,7 @@ public class TaggingService {
      */
     public void saveTag(Tag tag) {
         tagRepository.save(tag);
+        tagRelationRepository.save(new TagRelation(tag.getTitle().toLowerCase(), tag));
     }
 
     /**
@@ -78,7 +79,7 @@ public class TaggingService {
      * @param tags Tags to save
      */
     public void saveTags(List<Tag> tags) {
-        tagRepository.save(tags);
+        tags.forEach(this::saveTag);
     }
 
 }

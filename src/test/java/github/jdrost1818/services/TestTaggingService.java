@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -40,11 +41,13 @@ public class TestTaggingService {
         iPhone = new Tag("iPhone");
         black = new Tag("Black");
         white = new Tag("White");
+        List<Tag> tagList = new ArrayList<>();
+        tagList.add(iPhone);
+        tagList.add(black);
+        tagList.add(white);
 
         tagRepository.deleteAll();
-        tagRepository.save(iPhone);
-        tagRepository.save(black);
-        tagRepository.save(white);
+        taggingService.saveTags(tagList);
     }
 
     @Test

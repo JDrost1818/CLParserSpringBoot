@@ -75,7 +75,7 @@ public class TestPricingService {
         assertNotEquals(price, testItem.getPrice());
 
         // Ensure the new price is cached
-        assertEquals(price, itemRepository.findOne("test").getPrice());
+        assertEquals(price, itemRepository.findOne(testItem.getName()).getPrice());
     }
 
     @Test
