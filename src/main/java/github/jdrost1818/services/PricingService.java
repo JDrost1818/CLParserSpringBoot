@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * This class is charged with all things relating to finding the most
@@ -34,73 +35,86 @@ public class PricingService {
     public static final String NULL_URL = "http://www.thepricegeek.com/?no_results=";
     public static final String URL_SUFFIX = "?country=us";
 
-    public static final BigDecimal NO_PRICING_DATA = BigDecimal.valueOf(-1);
-
-
-    /**
-     * Public entry point to get the price of an item
-     *
-     * @param itemQuery string representing the item
-     * @return the price of the item if we can find it
-     */
-    public BigDecimal getPrice(String itemQuery) {
-        return parsePrice(itemQuery);
-    }
+    public static final BigDecimal NO_PRICING_DATA = BigDecimal.valueOf(0);
 
     /**
-     * Converts the item to a valid url for a service call
+     * Utilizes the DB to access prices faster than it would be
+     * to hit the pricing service via the web. Also checks that
+     * the price we have is up to date and is viable to use, if
+     * it isn't, it will look up the price and store it for use
+     * later.
      *
-     * @param query the string representing the item
-     * @return a valid url to contact our service
+     * @param item this for which to find the price
+     * @return price of the given item
      */
-    public String queryToUrl(String query) {
-        if (query == null || "".equals(query)) {
-            return NULL_URL;
+    public BigDecimal calcPrice(Item item) {
+        BigDecimal price = NO_PRICING_DATA;
+        if (item != null && item.isStillValid()) {
+            // Check if the item is cached first
+            price = item.getPrice();
+        } else if (item != null) {
+            // Finds a newer price
+            price = findNewPriceForString(item.getName());
+
+            // Updates the model for caching
+            Item newItem = new Item(item.getName());
+            newItem.setDateCached(new Date());
+            newItem.setPrice(price);
+
+            // Persists the change
+            itemRepository.save(newItem);
         }
-        return String.format("%s%s%s", BASE_URL, query.replace(" ", "+"), URL_SUFFIX);
+
+        return price;
     }
 
     /**
-     * Is given a query and determines the price by either:
-     * 1 - checking the cache for the item
-     * 2 - making a service call for item
+     * Finds the total price of all items given while utilizing the cache
+     *
+     * @param items items for which to find the price
+     * @return price of all the items
+     */
+    public BigDecimal calcPrice(List<Item> items) {
+        BigDecimal price = NO_PRICING_DATA;
+        if (items != null) {
+            for (Item curItem : items) {
+                price = price.add(calcPrice(curItem));
+            }
+        }
+
+        return price;
+    }
+
+    /**
+     * Is given a query and determines the price by calling
+     * helper functions depending on if we have the item
+     * in the database or not
      *
      * @param itemQuery the string representing the item we want to find the price
      * @return the market price of the item if we can find it
      */
-    private BigDecimal parsePrice(String itemQuery) {
-        BigDecimal price;
+    public BigDecimal calcPrice(String itemQuery) {
+        BigDecimal price = NO_PRICING_DATA;
 
-        // Repositories don't like null values for ids
-        if (itemQuery == null) {
-            return NO_PRICING_DATA;
-        }
-
-        Item foundItem = itemRepository.findOne(itemQuery);
-        if (foundItem != null && foundItem.isStillValid()) {
-            // Check if the item is cached first
-            price = foundItem.getPrice();
-        } else {
-            // If not cached, or the cache is out
-            // of date, determine the price
-            String url = queryToUrl(itemQuery);
-            Document doc = JSoupAddOn.connect(url);
-            price = extractPrice(doc);
-
-            // Updates the model for caching - creates
-            // if this is an entirely new entry
-            if (!price.equals(NO_PRICING_DATA)) {
-                if (foundItem == null) {
-                    foundItem = new Item(itemQuery);
-                }
-                foundItem.setDateCached(new Date());
-                foundItem.setPrice(price);
-
-                // Persists the change
-                itemRepository.save(foundItem);
+        // If this is an item we have in our DB, we should find the
+        // price via the item itself so that we can utilize the cache
+        if (itemQuery != null) {
+            Item foundItem = itemRepository.findOne(itemQuery);
+            if (foundItem == null) {
+                price = findNewPriceForString(itemQuery);
+            } else {
+                price = calcPrice(foundItem);
             }
         }
+
         return price;
+    }
+
+    private BigDecimal findNewPriceForString(String itemQuery) {
+        String url = queryToUrl(itemQuery);
+        Document doc = JSoupAddOn.connect(url);
+
+        return extractPrice(doc);
     }
 
     /**
@@ -129,5 +143,19 @@ public class PricingService {
         }
 
         return price;
+    }
+
+    /**
+     * Converts the item to a valid url for a service call
+     *
+     * @param query the string representing the item
+     * @return a valid url to contact our service
+     */
+    String queryToUrl(String query) {
+        if (query == null || "".equals(query)) {
+            return NULL_URL;
+        }
+
+        return String.format("%s%s%s", BASE_URL, query.replace(" ", "+"), URL_SUFFIX);
     }
 }

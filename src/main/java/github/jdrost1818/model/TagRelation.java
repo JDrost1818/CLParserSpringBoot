@@ -1,11 +1,14 @@
 package github.jdrost1818.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
+ * Table in charge of relating regular terms to actual tags.
+ * For example:
+ *
+ *      TAG_DESCRIPTION_JOIN
+ *
+ *
  * Created by JAD0911 on 4/14/2016.
  */
 @Entity

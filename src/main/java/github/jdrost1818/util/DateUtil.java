@@ -31,6 +31,7 @@ public final class DateUtil {
         }
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
         return formatter.format(date);
     }
 

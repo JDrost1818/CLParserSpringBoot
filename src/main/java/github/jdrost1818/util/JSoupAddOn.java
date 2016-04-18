@@ -47,6 +47,7 @@ public final class JSoupAddOn {
                 numTries++;
             }
         }
+
         return doc;
     }
 
@@ -59,6 +60,7 @@ public final class JSoupAddOn {
             if (s != null && !"".equals(s))
                 return s;
         }
+
         return null;
     }
 }

@@ -31,15 +31,30 @@ public class TaggingService {
      * @return list of tags which have a relation in the words
      */
     public List<Tag> getTags(String words) {
-        String[] wordList = words.toLowerCase().split(" ");
+        String normalizedWords = normalize(words);
         List<Tag> tagList = new ArrayList<>();
-        for (String word : wordList) {
-            TagRelation foundTag = tagRelationRepository.findOne(word);
-            if (foundTag != null) {
-                tagList.add(foundTag.getTag());
+
+        // Todo - Optimize
+        Iterable<Tag> allTags = tagRepository.findAll();
+        for (Tag curTag : allTags) {
+            if (normalizedWords.contains(String.format(" %s ", curTag.getTitle().toLowerCase()))) {
+                tagList.add(curTag);
             }
         }
+
         return tagList;
+    }
+
+    /**
+     * Removes all unnecessary punctuation/characters and converts
+     * the string to lowercase. This ensures all tags will be found,
+     * ie "black,", "BLACK", and "Black" all match for the 'Black' tag.
+     *
+     * @param words String to be normalized
+     * @return normalized String
+     */
+    private String normalize(String words) {
+        return String.format(" %s ", words.toLowerCase().replace(",", "").replace(".", ""));
     }
 
     /**
@@ -57,7 +72,7 @@ public class TaggingService {
                 tag = new Tag(tagLine);
                 tagRepository.save(tag);
             }
-            tagRelationRepository.save(new TagRelation(words, tag));
+            tagRelationRepository.save(new TagRelation(words.toLowerCase(), tag));
         }
     }
 
@@ -68,8 +83,7 @@ public class TaggingService {
      * @param tag Tag to save
      */
     public void saveTag(Tag tag) {
-        tagRepository.save(tag);
-        tagRelationRepository.save(new TagRelation(tag.getTitle().toLowerCase(), tag));
+        addTagRelation(tag.getTitle(), tag.getTitle());
     }
 
     /**
@@ -82,4 +96,29 @@ public class TaggingService {
         tags.forEach(this::saveTag);
     }
 
+    /**
+     * Essentially extends the delete functionality to this component
+     * to keep all tag concerns centrally located.
+     *
+     * @param tag Tag to delete
+     */
+    public void delete(Tag tag) {
+        if (tag.getId() == null) {
+            tag = tagRepository.findByTitleIgnoreCase(tag.getTitle());
+        }
+        if (tag != null) {
+            List<TagRelation> tagsToDelete = tagRelationRepository.findAllByTag(tag);
+            tagRelationRepository.delete(tagsToDelete);
+            tagRepository.delete(tag);
+        }
+    }
+
+    /**
+     * Essentially extends the deleteAll functionality to this component
+     * to keep all tag concerns centrally located.
+     */
+    public void deleteAll() {
+        tagRelationRepository.deleteAll();
+        tagRepository.deleteAll();
+    }
 }
