@@ -203,4 +203,5 @@ public class TestCraigslistService {
         List<CraigslistPost> foundPosts = craigslistService.search(null, null);
         assertEquals(0, foundPosts.size());
     }
+
 }

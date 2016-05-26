@@ -57,7 +57,7 @@ public class Item implements Serializable {
     }
 
     public void setDateCached(Date dateCached) {
-        this.dateCached = dateCached;
+        this.dateCached = new Date(dateCached.getTime());
     }
 
     public boolean isStillValid() {

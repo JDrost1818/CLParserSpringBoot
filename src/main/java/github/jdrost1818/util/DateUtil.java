@@ -2,6 +2,7 @@ package github.jdrost1818.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -13,7 +14,7 @@ import java.util.TimeZone;
  */
 public final class DateUtil {
 
-    public static final long DAY_IN_MS = 1000 * 60 * 60 * 24;
+    public static final long DAY_IN_MS = 1000 * 60 * 60 * 24L;
 
     private DateUtil() {
         // Prevent instantiation

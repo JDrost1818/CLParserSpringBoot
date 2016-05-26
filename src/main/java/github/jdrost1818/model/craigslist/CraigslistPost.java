@@ -1,18 +1,18 @@
 package github.jdrost1818.model.craigslist;
 
+import github.jdrost1818.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.util.CollectionUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static github.jdrost1818.data.CraigslistConstants.ID_TAG;
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 
 /**
  * Created by JAD0911 on 3/24/2016.
@@ -37,22 +37,26 @@ public class CraigslistPost {
 
     private Integer price = -1;
     private Integer value = -1;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date datePosted = new Date(0);
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateUpdated = new Date(0);
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateCached = new Date(0);
 
     public static CraigslistPost parsePost(Element htmlElement, String baseUrl) {
         CraigslistPost newPost = new CraigslistPost();
 
         newPost.setId(htmlElement.attr(ID_TAG));
-        if ("".equals(newPost.getId())) {
+        if (StringUtil.isEmpty(newPost.getId())) {
             throw new IllegalArgumentException("Did not provide a post");
         }
 
         Elements priceElement = htmlElement.select("a span.price");
-        if (!priceElement.isEmpty())
+        if (!CollectionUtils.isEmpty(priceElement)) {
             newPost.setPrice(priceElement.text());
-
+        }
 
         Element detailElement = htmlElement.select("span.txt").get(0);
         Element plElement = detailElement.select("span.pl").get(0);
@@ -156,7 +160,7 @@ public class CraigslistPost {
     }
 
     public void setDatePosted(Date datePosted) {
-        this.datePosted = datePosted;
+        this.datePosted = new Date(datePosted.getTime());
     }
 
     public Date getDateUpdated() {
@@ -164,7 +168,7 @@ public class CraigslistPost {
     }
 
     public void setDateUpdated(Date dateUpdated) {
-        this.dateUpdated = dateUpdated;
+        this.dateUpdated = new Date(dateUpdated.getTime());
     }
 
     public Date getDateCached() {
@@ -172,22 +176,11 @@ public class CraigslistPost {
     }
 
     public void setDateCached(Date dateCached) {
-        this.dateCached = dateCached;
+        this.dateCached = new Date(dateCached.getTime());
     }
 
     public boolean deepEquals(CraigslistPost otherPost) {
-        return otherPost != null
-                && getId().equals(otherPost.getId())
-                && getTitle().equals(otherPost.getTitle())
-                && getDescription().equals(otherPost.getDescription())
-                && getLink().equals(otherPost.getLink())
-                && getCounty().equals(otherPost.getCounty())
-                && getCategory().equals(otherPost.getCategory())
-                && getLocation().equals(otherPost.getLocation())
-                && getPrice().equals(otherPost.getPrice())
-                && getValue().equals(otherPost.getValue())
-                && getDatePosted().equals(otherPost.getDatePosted())
-                && getDateUpdated().equals(otherPost.getDateUpdated());
+        return reflectionEquals(this, otherPost, "datePosted", "dateUpdated", "dateCached");
     }
 
     public void update(CraigslistPost post) {
