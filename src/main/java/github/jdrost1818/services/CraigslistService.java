@@ -5,6 +5,7 @@ import github.jdrost1818.model.craigslist.CraigslistPost;
 import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.util.JSoupAddOn;
 import github.jdrost1818.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static github.jdrost1818.data.CraigslistConstants.*;
@@ -35,7 +37,7 @@ public class CraigslistService {
     @Autowired
     private CraigslistPostRepository craigslistPostRepository;
 
-    private static final Logger logger = Logger.getLogger(CraigslistService.class);
+    private static final Logger LOGGER = Logger.getLogger(CraigslistService.class);
 
     /**
      * Searches for all posts that are matched by the {@link SearchCriteria}
@@ -52,7 +54,7 @@ public class CraigslistService {
         List<CraigslistPost> postsFromPage;
         Document doc;
 
-        if (searchCriteria != null) {
+        if (Objects.nonNull(searchCriteria)) {
             int curPage = 0;
             int numNewPostsFoundOnPage = NUM_RESULTS_PER_PAGE;
             String baseUrl = getBaseUrl(searchCriteria.getCity());
@@ -83,7 +85,7 @@ public class CraigslistService {
     public List<CraigslistPost> parsePage(Date earliestDate, Document doc, String baseUrl) {
         List<CraigslistPost> posts = new ArrayList<>();
 
-        if (doc != null) {
+        if (Objects.nonNull(doc)) {
             // Gets the container which has the actual posts
             Elements allPosts = doc.select(POSTS_TAG);
 
@@ -113,13 +115,13 @@ public class CraigslistService {
         try {
             dateUpdated = new SimpleDateFormat("yyyy-MM-dd hh:mm").parse(html.select("time").attr("datetime"));
         } catch (ParseException e) {
-            logger.error("Could not parse date - invalid post format");
+            LOGGER.error("Could not parse date - invalid post format");
             return post;
         }
 
         // This means the post has not already been found
         // so we need to create it and save it in the db
-        if (post == null) {
+        if (Objects.isNull(post)) {
             post = CraigslistPost.parsePost(html, baseUrl);
         } else if (post.getDateCached().before(dateUpdated)) {
             post.update(CraigslistPost.parsePost(html, baseUrl));
@@ -146,8 +148,9 @@ public class CraigslistService {
         Integer maxPrice = criteria.getMaxPrice();
         String match = StringUtil.format(criteria.getMatch(), "").replace(" ", "+");
         String exclu = StringUtil.format(criteria.getExclusions(), "").replace(" ", "+-");
-        if (!"".equals(exclu))
+        if (StringUtils.isNotEmpty(exclu)) {
             exclu = "+-" + exclu;
+        }
 
         return String.format("%ss=%s&query=%s%s&min_price=%s&max_price=%s&srchType=%s&hasPic=%s&postedToday=%s&searchNearby=%s",
                 getBaseUrlSearchUrl(city, category),

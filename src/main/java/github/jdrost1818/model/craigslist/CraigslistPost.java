@@ -1,6 +1,7 @@
 package github.jdrost1818.model.craigslist;
 
 import github.jdrost1818.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -49,7 +50,7 @@ public class CraigslistPost {
         CraigslistPost newPost = new CraigslistPost();
 
         newPost.setId(htmlElement.attr(ID_TAG));
-        if (StringUtil.isEmpty(newPost.getId())) {
+        if (StringUtils.isEmpty(newPost.getId())) {
             throw new IllegalArgumentException("Did not provide a post");
         }
 

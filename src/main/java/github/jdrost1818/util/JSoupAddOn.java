@@ -1,5 +1,6 @@
 package github.jdrost1818.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -7,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Contains tools to make interfacing with the Jsoup API
@@ -16,7 +18,7 @@ import java.io.IOException;
  */
 public final class JSoupAddOn {
 
-    private static final Logger logger = Logger.getLogger(JSoupAddOn.class);
+    private static final Logger LOGGER = Logger.getLogger(JSoupAddOn.class);
 
     private JSoupAddOn() {
         // Prevent instantiation
@@ -34,15 +36,15 @@ public final class JSoupAddOn {
     public static Document connect(String url) {
         Document doc = null;
         int numTries = 0;
-        while (numTries < 5 && doc == null) {
+        while (numTries < 5 && Objects.isNull(doc)) {
             try {
                 doc = Jsoup.connect(url).get();
             } catch (IOException e) {
-                logger.error("Error while trying to connect to URL. Retrying", e);
+                LOGGER.error("Error while trying to connect to URL. Retrying", e);
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException ignore) {
-                    logger.error("Could not sleep", ignore);
+                    LOGGER.error("Could not sleep", ignore);
                 }
                 numTries++;
             }
@@ -56,7 +58,7 @@ public final class JSoupAddOn {
         Elements elements = document.select("meta[" + metaKey + "=" + attr + "]");
         for (Element element : elements) {
             final String s = element.attr("content");
-            if (s != null && !"".equals(s))
+            if (StringUtils.isNotEmpty(s))
                 return s;
         }
         return null;

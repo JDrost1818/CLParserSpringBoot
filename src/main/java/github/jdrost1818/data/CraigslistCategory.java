@@ -48,8 +48,8 @@ public enum CraigslistCategory {
 
     private String[] urls;
 
-    CraigslistCategory(String[] _urls) {
-        this.urls = _urls;
+    CraigslistCategory(String[] urls) {
+        this.urls = urls;
     }
 
     public String all() {

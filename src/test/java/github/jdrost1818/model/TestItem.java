@@ -2,6 +2,7 @@ package github.jdrost1818.model;
 
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import static org.junit.Assert.assertFalse;
@@ -21,14 +22,14 @@ public class TestItem {
     @Test
     public void testIsValid() {
         Item item = new Item();
-        item.setDateCached(new Date());
+        item.setDateCached(LocalDateTime.now());
         assertTrue(item.isStillValid());
     }
 
     @Test
     public void testIsValidNotValid() {
         Item item = new Item();
-        item.setDateCached(new Date(0));
+        item.setDateCached(LocalDateTime.MIN);
         assertFalse(item.isStillValid());
     }
 }

@@ -14,8 +14,6 @@ import java.util.TimeZone;
  */
 public final class DateUtil {
 
-    public static final long DAY_IN_MS = 1000 * 60 * 60 * 24L;
-
     private DateUtil() {
         // Prevent instantiation
     }
@@ -33,15 +31,5 @@ public final class DateUtil {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         return formatter.format(date);
-    }
-
-    /**
-     * Simplifies getting past days
-     *
-     * @param daysAgo number of days to go back in time from the present
-     * @return the date from the specified number of days in the past
-     */
-    public static Date getXDaysAgo(int daysAgo) {
-        return new Date(System.currentTimeMillis() - (daysAgo * DAY_IN_MS));
     }
 }

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -26,7 +27,7 @@ public class Item implements Serializable {
     private String name;
 
     private BigDecimal price;
-    private Date dateCached;
+    private LocalDateTime dateCached;
 
     public Item() {
         // Needed for JPA
@@ -52,19 +53,19 @@ public class Item implements Serializable {
         this.price = price;
     }
 
-    public Date getDateCached() {
+    public LocalDateTime getDateCached() {
         return dateCached;
     }
 
-    public void setDateCached(Date dateCached) {
-        this.dateCached = new Date(dateCached.getTime());
+    public void setDateCached(LocalDateTime dateCached) {
+        this.dateCached = dateCached;
     }
 
     public boolean isStillValid() {
         if (getDateCached() == null) {
             return false;
         }
-        Date oldestValidCacheDate = DateUtil.getXDaysAgo(CacheConfig.DAYS_TO_CACHE);
-        return oldestValidCacheDate.before(getDateCached());
+        LocalDateTime oldestValidCacheDate = LocalDateTime.now().minusDays(CacheConfig.DAYS_TO_CACHE);
+        return oldestValidCacheDate.isBefore(getDateCached());
     }
 }

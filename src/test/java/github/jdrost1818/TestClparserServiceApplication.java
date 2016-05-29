@@ -15,6 +15,6 @@ public class TestClparserServiceApplication {
 
     @Test
     public void contextLoads() {
-        // Intentionally left blank
+        ClparserServiceApplication.main("");
     }
 }

@@ -12,12 +12,8 @@ public final class StringUtil {
         // Prevent instantiation
     }
 
-    public static boolean isEmpty(final String string) {
-        return Objects.isNull(string) || "".equals(string);
-    }
-
     public static String format(Object obj, String defaultString) {
-        if (obj == null) {
+        if (Objects.isNull(obj)) {
             return defaultString;
         } else if (obj instanceof Date) {
             return DateUtil.formatDate((Date) obj);

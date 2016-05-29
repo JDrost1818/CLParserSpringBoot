@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import static junit.framework.TestCase.assertEquals;
@@ -67,7 +68,7 @@ public class TestPricingService {
     public void testGetPriceGetsCached() {
         Item testItem = new Item("test");
         testItem.setPrice(new BigDecimal("-10"));
-        testItem.setDateCached(new Date(0));
+        testItem.setDateCached(LocalDateTime.now());
         itemRepository.save(testItem);
 
         // Ensure the service doesn't get a cached price
@@ -82,7 +83,7 @@ public class TestPricingService {
     public void testGetPriceGetsCachedPrice() {
         Item testItem = new Item("test");
         testItem.setPrice(new BigDecimal("-10.00"));
-        testItem.setDateCached(new Date());
+        testItem.setDateCached(LocalDateTime.now());
         itemRepository.save(testItem);
 
         assertEquals(testItem.getPrice(), pricingService.getPrice(testItem.getName()));
@@ -92,7 +93,7 @@ public class TestPricingService {
     public void testGetPriceItemNotInDB() {
         Item testItem = new Item("test");
         testItem.setPrice(new BigDecimal("-10"));
-        testItem.setDateCached(new Date(0));
+        testItem.setDateCached(LocalDateTime.MIN);
         itemRepository.delete(testItem);
 
         // Ensure the service doesn't get a cached price

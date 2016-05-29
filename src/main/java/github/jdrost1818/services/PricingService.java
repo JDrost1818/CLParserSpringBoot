@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * This class is charged with all things relating to finding the most
@@ -72,12 +75,12 @@ public class PricingService {
         BigDecimal price;
 
         // Repositories don't like null values for ids
-        if (itemQuery == null) {
+        if (Objects.isNull(itemQuery)) {
             return NO_PRICING_DATA;
         }
 
         Item foundItem = itemRepository.findOne(itemQuery);
-        if (foundItem != null && foundItem.isStillValid()) {
+        if (Objects.nonNull(foundItem) && foundItem.isStillValid()) {
             // Check if the item is cached first
             price = foundItem.getPrice();
         } else {
@@ -93,7 +96,7 @@ public class PricingService {
                 if (foundItem == null) {
                     foundItem = new Item(itemQuery);
                 }
-                foundItem.setDateCached(new Date());
+                foundItem.setDateCached(LocalDateTime.now());
                 foundItem.setPrice(price);
 
                 // Persists the change
@@ -113,14 +116,14 @@ public class PricingService {
     private BigDecimal extractPrice(Document doc) {
         BigDecimal price = NO_PRICING_DATA;
 
-        if (doc != null) {
+        if (Objects.nonNull(doc)) {
             // For http://www.thepricegeek.com/ the price is stored in a meta tag
             // EXAMPLE:
             //      <meta name="description" content="The price of anything is about $8.00, based on 51 historic results.">
             // If no results:
             //        <meta name="description" content="The Price Geek calculates the average price of items you see in marketplaces like eBay and Amazon, so you don't get ripped off.">
             String description = JSoupAddOn.getMetaTag(doc, "name", "description");
-            if (description != null && description.contains("$")) {
+            if (Objects.nonNull(description) && description.contains("$")) {
                 String priceString = description.split("\\$")[1].split(",")[0];
                 if (priceString.matches("[-+]?\\d*\\.?\\d+")) {
                     price = new BigDecimal(priceString);
