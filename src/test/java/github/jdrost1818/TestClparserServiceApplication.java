@@ -15,6 +15,5 @@ public class TestClparserServiceApplication {
 
     @Test
     public void contextLoads() {
-        ClparserServiceApplication.main("");
     }
 }

@@ -16,10 +16,6 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  * @since 1.0.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ClparserServiceApplication.class)
-@WebAppConfiguration
-@ActiveProfiles("test")
 public class TestSearchCriteria {
 
     @Test
