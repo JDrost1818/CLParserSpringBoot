@@ -1,6 +1,12 @@
 package github.jdrost1818.model;
 
+import github.jdrost1818.ClparserServiceApplication;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,6 +16,10 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  * @since 1.0.0
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = ClparserServiceApplication.class)
+@WebAppConfiguration
+@ActiveProfiles("test")
 public class TestSearchCriteria {
 
     @Test
