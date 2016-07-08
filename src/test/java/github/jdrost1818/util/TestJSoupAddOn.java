@@ -1,11 +1,11 @@
 package github.jdrost1818.util;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
 
 import static org.junit.Assert.*;
 

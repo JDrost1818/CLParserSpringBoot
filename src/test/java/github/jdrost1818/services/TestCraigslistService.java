@@ -1,12 +1,10 @@
 package github.jdrost1818.services;
 
-import github.jdrost1818.ClparserServiceApplication;
-import github.jdrost1818.data.CraigslistCategory;
-import github.jdrost1818.data.CraigslistConstants;
-import github.jdrost1818.model.SearchCriteria;
-import github.jdrost1818.model.craigslist.CraigslistPost;
-import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
-import github.jdrost1818.util.JSoupAddOn;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,12 +17,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
 import static org.junit.Assert.*;
+
+import github.jdrost1818.ClparserServiceApplication;
+import github.jdrost1818.data.CraigslistCategory;
+import github.jdrost1818.data.CraigslistConstants;
+import github.jdrost1818.model.SearchCriteria;
+import github.jdrost1818.model.craigslist.CraigslistPost;
+import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
+import github.jdrost1818.util.JSoupAddOn;
 
 /**
  * Created by Jake on 3/24/2016.

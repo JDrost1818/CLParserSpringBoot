@@ -1,8 +1,10 @@
 package github.jdrost1818.services;
 
-import github.jdrost1818.ClparserServiceApplication;
-import github.jdrost1818.model.Item;
-import github.jdrost1818.repository.ItemRepository;
+import static junit.framework.TestCase.assertEquals;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+
+import github.jdrost1818.ClparserServiceApplication;
+import github.jdrost1818.model.Item;
+import github.jdrost1818.repository.ItemRepository;
 
 /**
  * Created by JAD0911 on 3/24/2016.

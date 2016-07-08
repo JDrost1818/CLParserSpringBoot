@@ -1,13 +1,6 @@
 package github.jdrost1818.model;
 
-import github.jdrost1818.data.CraigslistConstants;
-import github.jdrost1818.model.craigslist.CraigslistPost;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.junit.Test;
-import org.mockito.Mockito;
+import static github.jdrost1818.data.CraigslistConstants.ID_TAG;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +8,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static github.jdrost1818.data.CraigslistConstants.ID_TAG;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.junit.Test;
+import org.mockito.Mockito;
+
 import static org.junit.Assert.*;
+
+import github.jdrost1818.data.CraigslistConstants;
+import github.jdrost1818.model.craigslist.CraigslistPost;
 
 /**
  * Created by Jake on 3/26/2016.
