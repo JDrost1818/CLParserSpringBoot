@@ -1,14 +1,14 @@
 package github.jdrost1818.util;
 
+import java.io.IOException;
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.Objects;
 
 /**
  * Contains tools to make interfacing with the Jsoup API

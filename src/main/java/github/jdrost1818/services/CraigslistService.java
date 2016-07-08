@@ -1,17 +1,6 @@
 package github.jdrost1818.services;
 
-import github.jdrost1818.model.SearchCriteria;
-import github.jdrost1818.model.craigslist.CraigslistPost;
-import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
-import github.jdrost1818.util.JSoupAddOn;
-import github.jdrost1818.util.StringUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import static github.jdrost1818.data.CraigslistConstants.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,7 +10,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static github.jdrost1818.data.CraigslistConstants.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import github.jdrost1818.model.SearchCriteria;
+import github.jdrost1818.model.craigslist.CraigslistPost;
+import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
+import github.jdrost1818.util.JSoupAddOn;
+import github.jdrost1818.util.StringUtil;
 
 /**
  * This class is a simple interface for searching Craigslist and parsing search results.

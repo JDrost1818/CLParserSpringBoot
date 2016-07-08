@@ -2,7 +2,6 @@ package github.jdrost1818.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 import java.util.TimeZone;
 
 /**

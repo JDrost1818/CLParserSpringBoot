@@ -1,17 +1,16 @@
 package github.jdrost1818.services;
 
-import github.jdrost1818.model.Item;
-import github.jdrost1818.repository.ItemRepository;
-import github.jdrost1818.util.JSoupAddOn;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
+import github.jdrost1818.model.Item;
+import github.jdrost1818.repository.ItemRepository;
+import github.jdrost1818.util.JSoupAddOn;
 
 /**
  * This class is charged with all things relating to finding the most

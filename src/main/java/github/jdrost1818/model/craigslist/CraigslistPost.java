@@ -1,18 +1,19 @@
 package github.jdrost1818.model.craigslist;
 
-import github.jdrost1818.util.StringUtil;
+import static github.jdrost1818.data.CraigslistConstants.ID_TAG;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.persistence.*;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static github.jdrost1818.data.CraigslistConstants.ID_TAG;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 
 /**

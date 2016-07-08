@@ -1,8 +1,9 @@
 package github.jdrost1818.repository;
 
-import github.jdrost1818.model.SearchCriteria;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import github.jdrost1818.model.SearchCriteria;
 
 /**
  * @author Jake Drost
