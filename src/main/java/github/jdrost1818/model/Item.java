@@ -11,6 +11,8 @@ import javax.persistence.Table;
 
 import github.jdrost1818.config.CacheConfig;
 
+import static java.util.Objects.isNull;
+
 /**
  * Created by JAD0911 on 3/24/2016.
  * <p>
@@ -61,7 +63,7 @@ public class Item implements Serializable {
     }
 
     public boolean isStillValid() {
-        if (getDateCached() == null) {
+        if (isNull(getDateCached())) {
             return false;
         }
         LocalDateTime oldestValidCacheDate = LocalDateTime.now().minusDays(CacheConfig.DAYS_TO_CACHE);

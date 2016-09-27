@@ -1,5 +1,7 @@
 package github.jdrost1818.data;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 /**
  * Created by Jake on 3/26/2016.
  */
@@ -20,17 +22,17 @@ public final class CraigslistConstants {
     }
 
     public static String getBaseUrl(String city) {
-        if (city == null || "".equals(city)) {
+        if (isEmpty(city)) {
             throw new IllegalArgumentException("Error: city argument must not be null or empty");
         }
         return String.format(BASE_URL, city);
     }
 
     public static String getBaseUrlSearchUrl(String city, String cat) {
-        if (city == null || "".equals(city)) {
+        if (isEmpty(city)) {
             throw new IllegalArgumentException("Error: city argument must not be null or empty");
         }
-        if (cat == null || "".equals(cat)) {
+        if (isEmpty(cat)) {
             return String.format(BASE_URL_SEARCH_URL, city, CraigslistCategory.ALL.all());
         }
         return String.format(BASE_URL_SEARCH_URL, city, cat);

@@ -1,6 +1,7 @@
 package github.jdrost1818.services;
 
 import static github.jdrost1818.data.CraigslistConstants.*;
+import static java.util.Objects.isNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -91,13 +92,13 @@ public class CraigslistService {
             Elements allPosts = doc.select(POSTS_TAG);
 
             // Adds all posts the user hasn't seen to the returned list
-            allPosts.stream()
-                    .forEach(html -> posts.add(loadPost(html, baseUrl)));
+            posts.addAll(allPosts.stream()
+                    .map(html -> loadPost(html, baseUrl))
+                    .filter(post -> post != null && (isNull(earliestDate) || post.getDateUpdated().after(earliestDate)))
+                    .collect(Collectors.toList()));
         }
 
-        return posts.stream()
-                .filter(post -> post != null && (earliestDate == null || post.getDateUpdated().after(earliestDate)))
-                .collect(Collectors.toList());
+        return posts;
     }
 
     /**
@@ -122,7 +123,7 @@ public class CraigslistService {
 
         // This means the post has not already been found
         // so we need to create it and save it in the db
-        if (Objects.isNull(post)) {
+        if (isNull(post)) {
             post = CraigslistPost.parsePost(html, baseUrl);
         } else if (post.getDateCached().before(dateUpdated)) {
             post.update(CraigslistPost.parsePost(html, baseUrl));

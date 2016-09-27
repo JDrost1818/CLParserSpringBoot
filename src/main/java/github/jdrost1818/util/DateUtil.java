@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import static java.util.Objects.isNull;
+
 /**
  * Util class that is responsible for all things relating to dates in
  * the app. Essentially, if as a programmer, you need to manipulate/get
@@ -24,7 +26,7 @@ public final class DateUtil {
      * @return formatted date String
      */
     public static String formatDate(Date date) {
-        if (date == null) {
+        if (isNull(date)) {
             return "00/00/0000";
         }
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");

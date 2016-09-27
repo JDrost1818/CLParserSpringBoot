@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 import github.jdrost1818.model.Item;
 import github.jdrost1818.repository.ItemRepository;
 import github.jdrost1818.util.JSoupAddOn;
+
+import static java.util.Objects.isNull;
 
 /**
  * This class is charged with all things relating to finding the most
@@ -56,7 +59,7 @@ public class PricingService {
      * @return a valid url to contact our service
      */
     public String queryToUrl(String query) {
-        if (query == null || "".equals(query)) {
+        if (StringUtils.isEmpty(query)) {
             return NULL_URL;
         }
         return String.format("%s%s%s", BASE_URL, query.replace(" ", "+"), URL_SUFFIX);
@@ -74,7 +77,7 @@ public class PricingService {
         BigDecimal price;
 
         // Repositories don't like null values for ids
-        if (Objects.isNull(itemQuery)) {
+        if (isNull(itemQuery)) {
             return NO_PRICING_DATA;
         }
 
@@ -92,7 +95,7 @@ public class PricingService {
             // Updates the model for caching - creates
             // if this is an entirely new entry
             if (!price.equals(NO_PRICING_DATA)) {
-                if (foundItem == null) {
+                if (isNull(foundItem)) {
                     foundItem = new Item(itemQuery);
                 }
                 foundItem.setDateCached(LocalDateTime.now());
@@ -120,7 +123,7 @@ public class PricingService {
             // EXAMPLE:
             //      <meta name="description" content="The price of anything is about $8.00, based on 51 historic results.">
             // If no results:
-            //        <meta name="description" content="The Price Geek calculates the average price of items you see in marketplaces like eBay and Amazon, so you don't get ripped off.">
+            //      <meta name="description" content="The Price Geek calculates the average price of items you see in marketplaces like eBay and Amazon, so you don't get ripped off.">
             String description = JSoupAddOn.getMetaTag(doc, "name", "description");
             if (Objects.nonNull(description) && description.contains("$")) {
                 String priceString = description.split("\\$")[1].split(",")[0];
