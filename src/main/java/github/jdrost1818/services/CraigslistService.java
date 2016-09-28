@@ -63,7 +63,7 @@ public class CraigslistService {
 
             // Iterate over whole pages
             while (numNewPostsFoundOnPage == NUM_RESULTS_PER_PAGE) {
-                String curUrl = createCraigslistUrl(searchCriteria, ++curPage * NUM_RESULTS_PER_PAGE);
+                String curUrl = createCraigslistUrl(searchCriteria, curPage++ * NUM_RESULTS_PER_PAGE);
                 doc = JSoupAddOn.connect(curUrl);
 
                 postsFromPage = parsePage(earliestDate, doc, baseUrl);
