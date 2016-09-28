@@ -4,9 +4,7 @@ app.factory('footerService', ($http) => {
             return $http({
                 method: 'GET',
                 url: '/json',
-                transformResponse: [function (response) {
-                    return response;
-                }]
+                transformResponse: undefined
             });
         }
     }
