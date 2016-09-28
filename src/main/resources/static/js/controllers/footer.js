@@ -3,10 +3,12 @@ app.directive('footer', () => {
         restrict: 'A',
         replace: true,
         templateUrl: "/js/directives/footer.html",
-        controller:  ['$scope', ($scope) => {
+        controller:  ['$scope', 'footerService', ($scope, footerService) => {
 
             function init() {
-                $scope.footerText = "This is some custom text";
+                footerService.getFooterText().then((response) => {
+                    $scope.footerText = response.data;
+                });
             }
 
             init();
