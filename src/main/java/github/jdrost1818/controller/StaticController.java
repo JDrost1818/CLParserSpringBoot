@@ -2,6 +2,7 @@ package github.jdrost1818.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Created by JAD0911 on 3/24/2016.
@@ -9,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class StaticController {
 
-    private static final String HOME = "index";
+    private static final String HOME = "index.html";
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home() {
         return HOME;
     }
