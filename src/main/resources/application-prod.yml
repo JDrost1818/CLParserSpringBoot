@@ -1,8 +1,13 @@
-spring.datasource.url=${JDBC_DATABASE_URL}
-spring.datasource.driverClassName=org.postgresql.Driver
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
 
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.show-sql=false
-spring.jpa.hibernate.ddl-auto=update
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: update
 
-server.port = ${PORT}
+server:
+  port: ${PORT}
