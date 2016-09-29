@@ -8,10 +8,10 @@
         <div id="header-nav-wrapper" class="col-xs-4 col-xs-offset-6">
             <nav>
                 <div ng-show="!authenticated">
-                    Login with: <a href="/login">Google</a>
+                    Login with: <a href="/login/google">Google</a>
                 </div>
                 <ul ng-show="authenticated">
-                    <li>Logged In!!!</li>
+                    <li>Logged In!!! {{ user.givenName }}</li>
                     <button ng-click="logout()" class="btn btn-primary">Logout</button>
                 </ul>
             </nav>
