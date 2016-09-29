@@ -7,9 +7,16 @@
 
         <div id="header-nav-wrapper" class="col-xs-4 col-xs-offset-6">
             <nav>
+                <ul>
+                    <li><a href="#login">Login</a></li>
+                    <li><a href="#signup">Sign Up</a></li>
+                </ul>
+
                 <div ng-show="!authenticated">
                     Login with: <a href="/login/google">Google</a>
                 </div>
+
+
                 <ul ng-show="authenticated">
                     <li>Logged In!!! {{ user.givenName }}</li>
                     <button ng-click="logout()" class="btn btn-primary">Logout</button>

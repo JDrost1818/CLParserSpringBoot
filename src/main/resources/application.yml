@@ -7,8 +7,8 @@ spring:
 
 google:
   client:
-    clientId: 176955303149-hvt8ed2eloopveqfm86e907dggk61n5o.apps.googleusercontent.com
-    clientSecret: 5tyVuHzQ4XOPUgVO_YC3aFTP
+    clientId: ${GOOGLE_CLIENT_ID}
+    clientSecret: ${GOOGLE_CLIENT_SECRET}
     accessTokenUri: https://www.googleapis.com/oauth2/v3/token
     userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
     tokenName: oauth_token
