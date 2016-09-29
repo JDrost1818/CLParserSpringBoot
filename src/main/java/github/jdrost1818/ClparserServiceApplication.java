@@ -18,11 +18,11 @@ public class ClparserServiceApplication extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/**")
-            .authorizeRequests()
-            .antMatchers("/", "/login**", "/webjars/**")
-            .permitAll()
-            .anyRequest()
-            .authenticated().and()
+                .authorizeRequests()
+                .antMatchers("/", "/login**", "/user/**", "/webjars/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated().and()
                 .logout().logoutSuccessUrl("/").permitAll().and()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 

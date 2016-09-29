@@ -12,7 +12,7 @@ public class StaticController {
 
     private static final String HOME = "login.html";
 
-    private static final String DASHBOARD = "dashboard/index";
+    private static final String DASHBOARD = "dashboard.html";
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home() {
