@@ -1,15 +1,24 @@
 #header {
-    position: static;
+    position: fixed;
     height: 100px;
-    margin-bottom: 100px;
     top: 0;
     background: #333;
     width: 100%;
     color: #EEE;
+    z-index: 100;
+}
+
+#content-wrapper {
+    background: #AEAEAE;
+}
+
+#content {
+    margin-top: 100px;
+    height: 10000px;
+    background: #fff;
 }
 
 #footer {
-    position: absolute;
     bottom: 0;
     height: 100px;
     background: #333;

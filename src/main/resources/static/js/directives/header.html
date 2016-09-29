@@ -1,6 +1,17 @@
 <header id="header">
-    <img src="./images/initial-logo.png">
-    <p>
-        This is a header - YAY! - {{ headerText }}
-    </p>
+    <div id="header-wrapper" class="row">
+
+        <div id="header-logo-wrapper" class="col-xs-2">
+            <img src="./images/initial-logo.png" height="70" style="margin: 15px 25px;">
+        </div>
+
+        <div id="header-nav-wrapper" class="col-xs-4 col-xs-offset-6">
+            <nav>
+                <p>
+                    This is a header - YAY! - {{ headerText }}
+                </p>
+            </nav>
+        </div>
+
+    </div>
 </header>

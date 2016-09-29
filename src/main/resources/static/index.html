@@ -16,15 +16,21 @@
 
 <header header></header>
 
-<h2>Administrator Panel</h2>
-<div class="home-section">
-    <ul class="menu-list">
-        <li><a href="#/users">Users</a></li>
-        <li><a href="#/roles">Roles</a></li>
-    </ul>
-</div>
+<div id="content-wrapper" class="row">
+    <div id="content" class="col-xs-8 col-xs-offset-2">
 
-<div ng-view></div>
+        <h2>Administrator Panel</h2>
+        <div class="home-section">
+            <ul class="menu-list">
+                <li><a href="#/users">Users</a></li>
+                <li><a href="#/roles">Roles</a></li>
+            </ul>
+        </div>
+
+        <div ng-view></div>
+
+    </div>
+</div>
 
 <footer footer></footer>
 
