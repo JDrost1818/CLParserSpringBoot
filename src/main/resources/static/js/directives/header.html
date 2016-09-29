@@ -7,9 +7,13 @@
 
         <div id="header-nav-wrapper" class="col-xs-4 col-xs-offset-6">
             <nav>
-                <p>
-                    This is a header - YAY! - {{ headerText }}
-                </p>
+                <div ng-show="!authenticated">
+                    Login with: <a href="/login">Google</a>
+                </div>
+                <ul ng-show="authenticated">
+                    <li>Logged In!!!</li>
+                    <button ng-click="logout()" class="btn btn-primary">Logout</button>
+                </ul>
             </nav>
         </div>
 

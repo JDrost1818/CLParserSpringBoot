@@ -5,14 +5,18 @@ spring:
   profiles:
     active: ${ACTIVE_PROFILE}
 
+security:
   oauth2:
     client:
-      clientId: 123
-      clientSecret: xxx
+      clientId: 176955303149-hvt8ed2eloopveqfm86e907dggk61n5o.apps.googleusercontent.com
+      clientSecret: 5tyVuHzQ4XOPUgVO_YC3aFTP
       accessTokenUri: https://www.googleapis.com/oauth2/v3/token
       userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
-      clientAuthenticationScheme: query
+      tokenName: oauth_token
+      authenticationScheme: query
+      clientAuthenticationScheme: form
       scope: profile email
+      registered-redirect-uri: http://localhost:8888/dashboard
     resource:
       userInfoUri: https://www.googleapis.com/plus/v1/people/me
-      preferTokenInfo: false
+
