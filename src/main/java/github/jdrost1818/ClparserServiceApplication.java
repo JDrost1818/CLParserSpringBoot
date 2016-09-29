@@ -48,8 +48,8 @@ public class ClparserServiceApplication extends WebSecurityConfigurerAdapter {
 
     private Filter ssoFilter() {
         OAuth2ClientAuthenticationProcessingFilter googleFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/google");
-        OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(google(), oauth2ClientContext);
-        googleFilter.setRestTemplate(facebookTemplate);
+        OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google(), oauth2ClientContext);
+        googleFilter.setRestTemplate(googleTemplate);
         googleFilter.setTokenServices(new UserInfoTokenServices(googleResource().getUserInfoUri(), google().getClientId()));
         return googleFilter;
     }
