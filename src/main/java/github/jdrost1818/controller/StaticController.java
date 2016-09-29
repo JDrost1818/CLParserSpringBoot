@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class StaticController {
 
-    private static final String HOME = "index.html";
+    private static final String HOME = "login.html";
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home() {
