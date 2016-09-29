@@ -6,6 +6,11 @@ app.controller('rolesController', ($scope) => {
     $scope.headingTitle = "Roles List";
 });
 
-app.controller('loginController', ($scope) => {
-    $scope.headingTitle = "Login";
+app.controller('loginController', ($scope, $route) => {
+    var route = $route.current['$$route'].originalPath;
+    $scope.isLoggingIn = route === "/login";
+
+    $scope.switchLoginType = (toLogin) => {
+        $scope.isLoggingIn = toLogin;
+    }
 });
