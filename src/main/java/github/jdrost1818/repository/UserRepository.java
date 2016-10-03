@@ -1,6 +1,6 @@
 package github.jdrost1818.repository;
 
-import github.jdrost1818.model.User;
+import github.jdrost1818.model.authentication.User;
 import org.springframework.data.repository.CrudRepository;
 
 /**

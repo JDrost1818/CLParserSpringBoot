@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="app" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="app" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>
+<html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="app" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="app" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,30 +16,41 @@
     <link rel="stylesheet" href="./css/app.css">
     <link rel="icon" sizes="192x192" href="./images/initial-logo.ico">
     <link href="https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link href="./css/fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.css">
 </head>
-<body>
+
+<body id="login-body">
 
 <header header></header>
 
-<div id="content-wrapper" class="row">
-    <div id="content" class="col-xs-12 col-md-8 col-md-offset-2">
+<div id="login-hero" class="content-wrapper row" ng-show="!authenticated">
+    <div id="login-content" class="content absolute-center">
 
-        <h2>Administrator Panel</h2>
-        <div class="home-section">
-            <ul class="menu-list">
-                <li><a href="#/users">Users</a></li>
-                <li><a href="#/roles">Roles</a></li>
-                <li><a href="#/login">Login</a></li>
-            </ul>
+        <div id="login-text-wrapper">
+            <h1>Craigslist Parser</h1>
+            <h4>Easily be alerted to the best prices available on your local Craigslist</h4>
+            <!-- OAUTH PROVIDERS -->
+            <div class="form-group">
+                <!-- GOOGLE -->
+                <a href="/login/google" class="pure-button google-red socicon-button">
+                    <span class="socicon socicon-googleplus"></span>Login With Google</a>
+
+                <!-- FACEBOOK -->
+                <a href="/login/facebook" class="pure-button facebook-blue socicon-button">
+                    <span class="socicon socicon-facebook"></span>Login With Facebook</a>
+            </div>
         </div>
-
-        <div ng-view></div>
 
     </div>
 </div>
 
-<footer footer></footer>
+<div ng-show="authenticated">
+    <h1>Hello World</h1>
+</div>
+
+<footer footer ng-show="authenticated"></footer>
 
 <script src="/webjars/angularjs/1.4.9/angular.js"></script>
 <script src="/webjars/angularjs/1.4.9/angular-resource.js"></script>
@@ -45,6 +60,5 @@
 <script src="/js/controllers/footer.js"></script>
 <script src="/js/controllers/header.js"></script>
 <script src="/js/services/footerService.js"></script>
-<link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.css">
 </body>
 </html>

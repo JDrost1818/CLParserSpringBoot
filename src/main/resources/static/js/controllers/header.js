@@ -7,7 +7,7 @@ app.directive('header', () => {
 
             // Gets the logged in user - if there is one
             $http.get("/user").success(function(data) {
-                $scope.user = data.userAuthentication.details.name;
+                $scope.user = data;
                 $scope.authenticated = true;
             }).error(function() {
                 $scope.user = "N/A";

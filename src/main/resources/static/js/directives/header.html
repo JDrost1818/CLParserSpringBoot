@@ -5,21 +5,11 @@
             <img src="./images/initial-logo.png" height="70" style="margin: 15px 25px;">
         </div>
 
-        <div id="header-nav-wrapper" class="col-xs-4 col-xs-offset-6">
+        <div id="header-nav-wrapper" class="col-xs-10" ng-show="authenticated">
             <nav>
-                <ul>
-                    <li><a href="#login">Login</a></li>
-                    <li><a href="#signup">Sign Up</a></li>
-                </ul>
-
-                <div ng-show="!authenticated">
-                    Login with: <a href="/login/google">Google</a>
-                </div>
-
-
-                <ul ng-show="authenticated">
-                    <li>Logged In!!! {{ user.givenName }}</li>
-                    <button ng-click="logout()" class="btn btn-primary">Logout</button>
+                <ul id="nav-item-list" ng-show="authenticated">
+                    <li class="nav-item" ng-click="logout()">Logout</li>
+                    <li class="nav-item">Hello, {{ user.firstName }}</li>
                 </ul>
             </nav>
         </div>

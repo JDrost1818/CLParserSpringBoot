@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -23,7 +23,7 @@ import github.jdrost1818.repository.ItemRepository;
  * Created by JAD0911 on 3/24/2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ClparserServiceApplication.class)
+@SpringBootTest(classes = ClparserServiceApplication.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class TestPricingService {

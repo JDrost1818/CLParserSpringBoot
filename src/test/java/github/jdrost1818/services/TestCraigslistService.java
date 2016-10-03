@@ -1,24 +1,5 @@
 package github.jdrost1818.services;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-
-import static org.junit.Assert.*;
-
 import github.jdrost1818.ClparserServiceApplication;
 import github.jdrost1818.data.CraigslistCategory;
 import github.jdrost1818.data.CraigslistConstants;
@@ -26,12 +7,30 @@ import github.jdrost1818.model.SearchCriteria;
 import github.jdrost1818.model.craigslist.CraigslistPost;
 import github.jdrost1818.repository.craigslist.CraigslistPostRepository;
 import github.jdrost1818.util.JSoupAddOn;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by Jake on 3/24/2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ClparserServiceApplication.class)
+@SpringBootTest(classes = ClparserServiceApplication.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class TestCraigslistService {
