@@ -1,6 +1,6 @@
 package github.jdrost1818.repository.authentication;
 
-import github.jdrost1818.model.authentication.GoogleUser;
+import github.jdrost1818.model.authentication.FacebookUser;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  * @since 1.0.0
  */
 @Repository
-public interface GoogleUserRepository extends CrudRepository<GoogleUser, String> {
+public interface FacebookRepository extends CrudRepository<FacebookUser, String> {
 }
