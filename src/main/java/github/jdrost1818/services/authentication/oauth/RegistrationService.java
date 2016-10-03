@@ -1,6 +1,5 @@
 package github.jdrost1818.services.authentication.oauth;
 
-import github.jdrost1818.model.authentication.FacebookUser;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.model.authentication.UserProvider;
 import org.springframework.data.repository.CrudRepository;
@@ -15,9 +14,9 @@ import static java.util.Objects.nonNull;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface RegistrationService {
+public interface RegistrationService <T extends UserProvider> {
 
-    default User getUser(CrudRepository<UserProvider, String> repo, OAuth2Authentication authentication) {
+    default User getUser(CrudRepository<T, String> repo, OAuth2Authentication authentication) {
         User user = null;
         Object authenticationDetails = authentication.getUserAuthentication().getDetails();
         if (nonNull(authenticationDetails) && authenticationDetails instanceof LinkedHashMap) {
@@ -29,6 +28,8 @@ public interface RegistrationService {
 
         return user;
     }
+
+    User getUser(OAuth2Authentication auth2Authentication);
 
     User saveUser(OAuth2Authentication authentication);
 

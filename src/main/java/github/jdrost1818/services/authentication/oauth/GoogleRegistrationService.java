@@ -18,23 +18,14 @@ import static java.util.Objects.nonNull;
  * @since 1.0.0
  */
 @Component
-public class GoogleRegistrationService implements RegistrationService {
+public class GoogleRegistrationService implements RegistrationService<GoogleUser> {
 
     @Autowired
-    GoogleUserRepository googleUserRepository;
+    protected GoogleUserRepository googleUserRepository;
 
     @Override
     public User getUser(OAuth2Authentication authentication) {
-        User user = null;
-        Object authenticationDetails = authentication.getUserAuthentication().getDetails();
-        if (nonNull(authenticationDetails) && authenticationDetails instanceof LinkedHashMap) {
-            LinkedHashMap details = (LinkedHashMap) authenticationDetails;
-            String googleId = details.get("id").toString();
-            GoogleUser googleUser = googleUserRepository.findOne(googleId);
-            user = nonNull(googleUser) ? googleUser.getUser() : null;
-        }
-
-        return user;
+        return this.getUser(googleUserRepository, authentication);
     }
 
     @Override

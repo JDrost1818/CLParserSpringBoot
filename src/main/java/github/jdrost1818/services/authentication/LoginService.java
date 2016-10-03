@@ -1,6 +1,7 @@
 package github.jdrost1818.services.authentication;
 
 import github.jdrost1818.model.authentication.User;
+import github.jdrost1818.services.authentication.oauth.FacebookRegistrationService;
 import github.jdrost1818.services.authentication.oauth.GoogleRegistrationService;
 import github.jdrost1818.services.authentication.oauth.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,14 @@ public class LoginService {
     @Value("${google.client.clientId}")
     private String googleClientId;
 
+    @Value("${facebook.client.clientId}")
+    private String facebookClientId;
+
     @Autowired
     private GoogleRegistrationService googleRegistrationService;
+
+    @Autowired
+    private FacebookRegistrationService facebookRegistrationService;
 
     private Map<String, RegistrationService> clientRegistrationServiceMap = new HashMap<>();
 
@@ -36,6 +43,7 @@ public class LoginService {
     @PostConstruct
     public void populateMap() {
         this.clientRegistrationServiceMap.put(googleClientId, googleRegistrationService);
+        this.clientRegistrationServiceMap.put(facebookClientId, facebookRegistrationService);
     }
 
     /**

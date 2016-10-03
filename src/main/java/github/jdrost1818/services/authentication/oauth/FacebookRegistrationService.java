@@ -20,14 +20,14 @@ import static java.util.Objects.nonNull;
  * @since 1.0.0
  */
 @Component
-public class FacebookRegistrationService implements RegistrationService {
+public class FacebookRegistrationService implements RegistrationService<FacebookUser> {
 
     @Autowired
-    FacebookRepository facebookUserRepository;
+    protected FacebookRepository facebookUserRepository;
 
     @Override
     public User getUser(OAuth2Authentication authentication) {
-        return getUser(facebookUserRepository, authentication);
+        return this.getUser(facebookUserRepository, authentication);
     }
 
     @Override
@@ -37,24 +37,23 @@ public class FacebookRegistrationService implements RegistrationService {
 
         userToSave.setFirstName(this.extractFirstName(userDetails));
         userToSave.setLastName(this.extractLastName(userDetails));
-        userToSave.setEmail(this.extractEmail(userDetails));
 
-        GoogleUser googleUser = new GoogleUser(userDetails.get("id").toString(), userToSave);
+        FacebookUser facebookUser = new FacebookUser(userDetails.get("id").toString(), userToSave);
 
-        return facebookUserRepository.save(googleUser).getUser();
+        return facebookUserRepository.save(facebookUser).getUser();
     }
 
     private String extractFirstName(LinkedHashMap userDetails) {
-        return ((LinkedHashMap) userDetails.get("name")).get("givenName").toString();
+        String fullName = userDetails.get("name").toString();
+
+        // This obviously won't work for names with spaces in them...
+        return fullName.split(" ")[0];
     }
 
     private String extractLastName(LinkedHashMap userDetails) {
-        return ((LinkedHashMap) userDetails.get("name")).get("familyName").toString();
-    }
+        String fullName = userDetails.get("name").toString();
 
-    @SuppressWarnings("unchecked")
-    private String extractEmail(LinkedHashMap userDetails) {
-        return ((ArrayList<LinkedHashMap<String, String>>) userDetails.get("emails")).get(0).get("value");
-    }
+        // This obviously won't work for names with spaces in them...
+        return fullName.split(" ")[1];    }
 
 }
