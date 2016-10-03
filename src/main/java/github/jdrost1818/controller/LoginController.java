@@ -1,6 +1,5 @@
 package github.jdrost1818.controller;
 
-import github.jdrost1818.model.authentication.LoginCredentials;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.repository.UserRepository;
 import github.jdrost1818.services.authentication.LoginService;
@@ -27,15 +26,6 @@ public class LoginController {
 
     @Autowired
     protected LoginService registrationService;
-
-    @RequestMapping(value = "/login1", method = RequestMethod.POST)
-    public User login(LoginCredentials credentials) {
-        User userLoggingIn = userRepository.findByEmail(credentials.getUsername());
-        if (nonNull(userLoggingIn) && Objects.equals(userLoggingIn.getPassword(), credentials.getPassword())) {
-            return userLoggingIn;
-        }
-        return null;
-    }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public User getUser(Principal principal) {

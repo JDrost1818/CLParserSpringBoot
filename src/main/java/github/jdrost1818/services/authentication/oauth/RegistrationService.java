@@ -29,8 +29,23 @@ public interface RegistrationService <T extends UserProvider> {
         return user;
     }
 
-    User getUser(OAuth2Authentication auth2Authentication);
+    /**
+     * Finds the user corresponding the authentication provided. Will
+     * return null if there is not a corresponding user for the
+     * provided authentication in the database.
+     *
+     * @param authentication authentication object from an OAuth request
+     * @return the corresponding user for the authentication
+     */
+    User getUser(OAuth2Authentication authentication);
 
+    /**
+     * Creates a new {@link User} with the information it can find
+     * from the given authentication and saves it to the database
+     *
+     * @param authentication authentication object from an OAuth request
+     * @return the user saved to the database
+     */
     User saveUser(OAuth2Authentication authentication);
 
 }

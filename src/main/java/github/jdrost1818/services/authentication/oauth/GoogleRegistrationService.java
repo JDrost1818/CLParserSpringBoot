@@ -1,16 +1,16 @@
 package github.jdrost1818.services.authentication.oauth;
 
+import github.jdrost1818.model.authentication.GoogleOAuthUserDetails;
 import github.jdrost1818.model.authentication.GoogleUser;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.repository.authentication.GoogleUserRepository;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import static java.util.Objects.nonNull;
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 
 /**
  * @author Jake Drost
@@ -23,36 +23,31 @@ public class GoogleRegistrationService implements RegistrationService<GoogleUser
     @Autowired
     protected GoogleUserRepository googleUserRepository;
 
+    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getUser(OAuth2Authentication authentication) {
         return this.getUser(googleUserRepository, authentication);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User saveUser(OAuth2Authentication authentication) {
-        LinkedHashMap userDetails = (LinkedHashMap) authentication.getUserAuthentication().getDetails();
+        GoogleOAuthUserDetails userDetails = objectMapper.convertValue(authentication.getUserAuthentication().getDetails(), GoogleOAuthUserDetails.class);
         User userToSave = new User();
 
-        userToSave.setFirstName(this.extractFirstName(userDetails));
-        userToSave.setLastName(this.extractLastName(userDetails));
-        userToSave.setEmail(this.extractEmail(userDetails));
+        userToSave.setFirstName(userDetails.getName().getGivenName());
+        userToSave.setLastName(userDetails.getName().getFamilyName());
+        userToSave.setEmail(userDetails.getEmails().get(0).getValue());
 
-        GoogleUser googleUser = new GoogleUser(userDetails.get("id").toString(), userToSave);
+        GoogleUser googleUser = new GoogleUser(userDetails.getId(), userToSave);
 
         return googleUserRepository.save(googleUser).getUser();
-    }
-
-    private String extractFirstName(LinkedHashMap userDetails) {
-        return ((LinkedHashMap) userDetails.get("name")).get("givenName").toString();
-    }
-
-    private String extractLastName(LinkedHashMap userDetails) {
-        return ((LinkedHashMap) userDetails.get("name")).get("familyName").toString();
-    }
-
-    @SuppressWarnings("unchecked")
-    private String extractEmail(LinkedHashMap userDetails) {
-        return ((ArrayList<LinkedHashMap<String, String>>) userDetails.get("emails")).get(0).get("value");
     }
 
 }
