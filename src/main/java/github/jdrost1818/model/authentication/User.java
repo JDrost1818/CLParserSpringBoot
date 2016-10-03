@@ -1,6 +1,7 @@
 package github.jdrost1818.model.authentication;
 
 import javax.persistence.*;
+import java.security.Principal;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User implements Principal {
 
     @Id
     @GeneratedValue
@@ -81,5 +82,11 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    @Transient
+    public String getName() {
+        return this.getFirstName() + " " + this.getLastName();
     }
 }
