@@ -4,8 +4,7 @@
 .selectable, .hoverable, .clickable {
     cursor: pointer;
 }
-
-body#login-body {
+.body-with-header {
     padding-top: 100px;
 }
 

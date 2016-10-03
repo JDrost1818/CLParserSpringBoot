@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if lt IE 7]>
+<html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="app" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="app" class="no-js"> <!--<![endif]-->
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CLParser</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/app.css">
+    <link rel="icon" sizes="192x192" href="./images/initial-logo.ico">
+    <link href="https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="./css/fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.css">
 </head>
-<body>
-<h1>Hello World</h1>
+
+<body class="body-with-header">
+
+<header header></header>
+
+<div id="dashboard" class="content-wrapper row">
+    <h1>Hello World</h1>
+</div>
+
+<script src="/webjars/angularjs/1.4.9/angular.js"></script>
+<script src="/webjars/angularjs/1.4.9/angular-resource.js"></script>
+<script src="/webjars/angularjs/1.4.9/angular-route.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/controller.js"></script>
+<script src="/js/controllers/footer.js"></script>
+<script src="/js/controllers/header.js"></script>
+<script src="/js/services/footerService.js"></script>
 </body>
 </html>

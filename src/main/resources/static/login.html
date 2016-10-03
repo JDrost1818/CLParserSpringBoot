@@ -21,11 +21,11 @@
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.css">
 </head>
 
-<body id="login-body">
+<body id="login-body" class="body-with-header">
 
 <header header></header>
 
-<div id="login-hero" class="content-wrapper row" ng-show="!authenticated">
+<div id="login-hero" class="content-wrapper row">
     <div id="login-content" class="content absolute-center">
 
         <div id="login-text-wrapper">
@@ -45,12 +45,6 @@
 
     </div>
 </div>
-
-<div ng-show="authenticated">
-    <h1>Hello World</h1>
-</div>
-
-<footer footer ng-show="authenticated"></footer>
 
 <script src="/webjars/angularjs/1.4.9/angular.js"></script>
 <script src="/webjars/angularjs/1.4.9/angular-resource.js"></script>
