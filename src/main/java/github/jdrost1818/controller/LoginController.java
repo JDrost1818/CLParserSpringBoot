@@ -1,5 +1,6 @@
 package github.jdrost1818.controller;
 
+import github.jdrost1818.model.authentication.SessionUser;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.repository.UserRepository;
 import github.jdrost1818.services.authentication.LoginService;
@@ -18,8 +19,10 @@ import static java.util.Objects.isNull;
  * Created by daugherty on 9/28/16.
  */
 @RestController
-@EnableOAuth2Sso
 public class LoginController {
+
+    @Autowired
+    protected SessionUser sessionUser;
 
     @Autowired
     protected UserRepository userRepository;
@@ -37,6 +40,8 @@ public class LoginController {
                 foundUser = registrationService.saveUser(authentication);
             }
         }
+
+        sessionUser.setCurrentUser(foundUser);
 
         return foundUser;
     }
