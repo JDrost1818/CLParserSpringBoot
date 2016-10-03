@@ -23,12 +23,17 @@ public class StaticController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home() {
-        return LOGIN;
+        return "redirect:home";
     }
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String dashboard() {
         return DASHBOARD;
+    }
+
+    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    public String login() {
+        return LOGIN;
     }
 
 }
