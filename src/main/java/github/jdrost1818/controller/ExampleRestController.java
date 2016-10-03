@@ -24,10 +24,4 @@ public class ExampleRestController {
         return "Current User: " +  sessionUser.getName();
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/curuser", method = RequestMethod.GET)
-    public User fetchCurrentUser() {
-        return sessionUser.getCurrentUser();
-    }
-
 }

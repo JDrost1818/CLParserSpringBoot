@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
  * Created by daugherty on 9/28/16.
@@ -33,15 +34,21 @@ public class LoginController {
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public Principal getUser(Principal principal) {
         User foundUser = null;
-        if (principal instanceof OAuth2Authentication) {
-            OAuth2Authentication authentication = (OAuth2Authentication) principal;
-            foundUser = registrationService.loadUser(authentication);
-            if (isNull(foundUser)) {
-                foundUser = registrationService.saveUser(authentication);
+
+        if (nonNull(sessionUser.getCurrentUser())) {
+            foundUser = sessionUser.getCurrentUser();
+        } else {
+            if (principal instanceof OAuth2Authentication) {
+                OAuth2Authentication authentication = (OAuth2Authentication) principal;
+                foundUser = registrationService.loadUser(authentication);
+                if (isNull(foundUser)) {
+                    foundUser = registrationService.saveUser(authentication);
+                }
             }
+
+            sessionUser.setCurrentUser(foundUser);
         }
 
-        sessionUser.setCurrentUser(foundUser);
 
         return foundUser;
     }
