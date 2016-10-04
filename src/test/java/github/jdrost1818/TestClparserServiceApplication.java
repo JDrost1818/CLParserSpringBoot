@@ -14,6 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 public class TestClparserServiceApplication {
 
     @Test
-    public void contextLoads() {
+    public void testContextLoads() {
+        ClparserServiceApplication.main();
     }
 }
