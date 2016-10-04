@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
  * Created by Jake on 3/24/2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = ClparserServiceApplication.class)
+@SpringApplicationConfiguration(classes = ClparserServiceApplication.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class TestCraigslistService {
