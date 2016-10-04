@@ -18,13 +18,9 @@ import java.util.Objects;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class JSoupAddOn {
+public abstract class JSoupAddOn {
 
     private static final Logger LOGGER = Logger.getLogger(JSoupAddOn.class);
-
-    private JSoupAddOn() {
-        // Prevent instantiation
-    }
 
     /**
      * Connects to a website using JSoup. This makes it easier to connect

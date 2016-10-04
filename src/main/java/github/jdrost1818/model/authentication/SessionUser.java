@@ -6,9 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
-import javax.security.auth.Subject;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author Jake Drost

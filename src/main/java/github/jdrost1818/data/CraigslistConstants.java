@@ -7,7 +7,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class CraigslistConstants {
+public abstract class CraigslistConstants {
 
     private static final String BASE_URL = "https://%s.craigslist.org/";
     private static final String BASE_URL_SEARCH_URL = "https://%s.craigslist.org/search/%s?";
@@ -18,10 +18,6 @@ public final class CraigslistConstants {
     public static final String POST_TAG = "p.row";
     public static final String POSTS_TAG = POST_WRAPPER_TAG + " " + POST_TAG;
     public static final String ID_TAG = "data-pid";
-
-    private CraigslistConstants() {
-        // Prevent instantiation
-    }
 
     public static String getBaseUrl(String city) {
         if (isEmpty(city)) {

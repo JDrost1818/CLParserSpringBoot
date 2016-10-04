@@ -15,11 +15,7 @@ import static java.util.Objects.isNull;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class DateUtil {
-
-    private DateUtil() {
-        // Prevent instantiation
-    }
+public interface DateUtil {
 
     /**
      * Ensures this app has a constant date format
@@ -27,7 +23,7 @@ public final class DateUtil {
      * @param date date to format to a String
      * @return formatted date String
      */
-    public static String formatDate(Date date) {
+    static String formatDate(Date date) {
         if (isNull(date)) {
             return "00/00/0000";
         }

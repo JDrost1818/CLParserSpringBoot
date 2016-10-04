@@ -8,13 +8,9 @@ import java.util.Objects;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class StringUtil {
+public interface StringUtil {
 
-    private StringUtil() {
-        // Prevent instantiation
-    }
-
-    public static String format(Object obj, String defaultString) {
+    static String format(Object obj, String defaultString) {
         if (Objects.isNull(obj)) {
             return defaultString;
         } else if (obj instanceof Date) {
@@ -24,7 +20,7 @@ public final class StringUtil {
         }
     }
 
-    public static String conditionalFormat(boolean shouldReturn, String acceptString, String rejectString) {
+    static String conditionalFormat(boolean shouldReturn, String acceptString, String rejectString) {
         return shouldReturn ? acceptString : rejectString;
     }
 }

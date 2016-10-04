@@ -5,11 +5,8 @@ package github.jdrost1818.config;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class CacheConfig {
+public interface CacheConfig {
 
-    public static final int DAYS_TO_CACHE = 7;
+    int DAYS_TO_CACHE = 7;
 
-    private CacheConfig() {
-        // Prevent instantiation
-    }
 }
