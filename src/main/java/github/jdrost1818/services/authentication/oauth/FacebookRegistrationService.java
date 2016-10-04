@@ -3,12 +3,13 @@ package github.jdrost1818.services.authentication.oauth;
 import github.jdrost1818.model.authentication.FacebookOAuthUserDetails;
 import github.jdrost1818.model.authentication.FacebookUser;
 import github.jdrost1818.model.authentication.User;
-import github.jdrost1818.repository.authentication.FacebookRepository;
+import github.jdrost1818.repository.authentication.FacebookUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 
 import static github.jdrost1818.util.ObjectMapperUtil.mapOauthResponse;
+import static java.util.Objects.isNull;
 
 /**
  * @author Jake Drost
@@ -19,7 +20,7 @@ import static github.jdrost1818.util.ObjectMapperUtil.mapOauthResponse;
 public class FacebookRegistrationService implements RegistrationService<FacebookUser> {
 
     @Autowired
-    protected FacebookRepository facebookUserRepository;
+    protected FacebookUserRepository facebookUserRepository;
 
     /**
      * {@inheritDoc}
@@ -34,16 +35,25 @@ public class FacebookRegistrationService implements RegistrationService<Facebook
      */
     @Override
     public User saveUser(OAuth2Authentication authentication) {
-        FacebookOAuthUserDetails userDetails = mapOauthResponse(
-                authentication.getUserAuthentication().getDetails(), FacebookOAuthUserDetails.class);
+        // Early exit on null input
+        if (isNull(authentication)
+                || isNull(authentication.getUserAuthentication())
+                || isNull(authentication.getUserAuthentication().getDetails())) {
+            return null;
+        }
 
+        Object userDetailMap = authentication.getUserAuthentication().getDetails();
+        FacebookOAuthUserDetails userDetails = mapOauthResponse(userDetailMap, FacebookOAuthUserDetails.class);
+
+        if (isNull(userDetails.getId())) {
+            return null;
+        }
         User userToSave = new User();
         userToSave.setFirstName(this.extractFirstName(userDetails.getName()));
         userToSave.setLastName(this.extractLastName(userDetails.getName()));
 
-        FacebookUser facebookUser = new FacebookUser(userDetails.getId(), userToSave);
-
-        return facebookUserRepository.save(facebookUser).getUser();
+        FacebookUser facebookUserToSave = new FacebookUser(userDetails.getId(), userToSave);
+        return facebookUserRepository.save(facebookUserToSave).getUser();
     }
 
     /**

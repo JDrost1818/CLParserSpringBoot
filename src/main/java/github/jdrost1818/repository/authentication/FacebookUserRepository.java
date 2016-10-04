@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  * @since 1.0.0
  */
 @Repository
-public interface FacebookRepository extends CrudRepository<FacebookUser, String> {
+public interface FacebookUserRepository extends CrudRepository<FacebookUser, String> {
 }

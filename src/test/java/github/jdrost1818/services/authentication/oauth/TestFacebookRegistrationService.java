@@ -1,43 +1,45 @@
 package github.jdrost1818.services.authentication.oauth;
 
 import github.jdrost1818.ClparserServiceApplication;
-import github.jdrost1818.model.authentication.GoogleUser;
+import github.jdrost1818.model.authentication.FacebookUser;
 import github.jdrost1818.model.authentication.User;
-import github.jdrost1818.repository.authentication.GoogleUserRepository;
+import github.jdrost1818.repository.authentication.FacebookUserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertNull;
 
+/**
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class TestGoogleRegistrationService {
+public class TestFacebookRegistrationService {
 
     @Autowired
-    private GoogleRegistrationService googleRegistrationService;
+    private FacebookRegistrationService facebookRegistrationService;
 
     @Autowired
-    private GoogleUserRepository googleUserRepository;
+    private FacebookUserRepository facebookUserRepository;
 
-    private GoogleUser googleUser;
+    private FacebookUser facebookUser;
 
     private User user;
 
@@ -53,9 +55,8 @@ public class TestGoogleRegistrationService {
         this.user = new User();
         this.user.setFirstName("FirstName");
         this.user.setLastName("LastName");
-        this.user.setEmail("email@example.com");
 
-        this.googleUser = this.googleUserRepository.save(new GoogleUser("1", this.user));
+        this.facebookUser = this.facebookUserRepository.save(new FacebookUser("1", this.user));
 
         /*
             Authentication Set Up
@@ -70,69 +71,50 @@ public class TestGoogleRegistrationService {
 
     @After
     public void cleanup() {
-        this.googleUserRepository.deleteAll();
+        this.facebookUserRepository.deleteAll();
     }
 
     @Test
     public void testNullAuthenticationArg() {
-        assertNull(this.googleRegistrationService.getUser(null));
+        assertNull(this.facebookRegistrationService.getUser(null));
     }
 
     @Test
     public void testUserDoesNotExist() {
         this.details.put("id", "this ID does not exist - I guarantee it");
-        assertNull(this.googleRegistrationService.getUser(this.oAuth2Authentication));
+        assertNull(this.facebookRegistrationService.getUser(this.oAuth2Authentication));
     }
 
     @Test
     public void testUserDoesExist() {
-        this.details.put("id", this.googleUser.getId());
-        reflectionEquals(this.googleUser, this.googleRegistrationService.getUser(this.oAuth2Authentication));
+        this.details.put("id", this.facebookUser.getId());
+        reflectionEquals(this.facebookUser, this.facebookRegistrationService.getUser(this.oAuth2Authentication));
     }
 
     @Test
     public void testSaveUserNullInput() {
-        assertNull(this.googleRegistrationService.saveUser(null));
+        assertNull(this.facebookRegistrationService.saveUser(null));
     }
 
     @Test
     public void testSaveUserNullDetails() {
         this.oAuth2Authentication.setDetails(null);
-        assertNull(this.googleRegistrationService.saveUser(this.oAuth2Authentication));
+        assertNull(this.facebookRegistrationService.saveUser(this.oAuth2Authentication));
     }
 
     @Test
     public void testSaveUserInvalidDetails() {
         this.oAuth2Authentication.setDetails(null);
-        assertNull(this.googleRegistrationService.saveUser(this.oAuth2Authentication));
+        assertNull(this.facebookRegistrationService.saveUser(this.oAuth2Authentication));
     }
 
     @Test
     public void testSaveUser() {
-        Map<String, String> nameMap = new LinkedHashMap<>();
-        nameMap.put("givenName", this.user.getFirstName());
-        nameMap.put("familyName", this.user.getLastName());
-
-        Map<String, String> emailMap = new LinkedHashMap<>();
-        emailMap.put("value", UUID.randomUUID() + this.user.getEmail()); // emails need to be unique in the db
-
         this.details.put("id", UUID.randomUUID());
-        this.details.put("emails", Collections.singletonList(emailMap));
-        this.details.put("name", nameMap);
+        this.details.put("name", this.user.getFirstName() + " " + this.user.getLastName());
 
         // All the properties should be the same except for the id - so we'll ignore that for now
-        reflectionEquals(this.googleUser, this.googleRegistrationService.saveUser(this.oAuth2Authentication), "id", "email");
-    }
-
-    @Test(expected = JpaSystemException.class)
-    public void testSaveEmailAlreadyUse() {
-        Map<String, String> emailMap = new LinkedHashMap<>();
-        emailMap.put("value", this.user.getEmail());
-
-        this.details.put("id", UUID.randomUUID());
-        this.details.put("emails", Collections.singletonList(emailMap));
-
-        this.googleRegistrationService.saveUser(this.oAuth2Authentication);
+        reflectionEquals(this.facebookUser, this.facebookRegistrationService.saveUser(this.oAuth2Authentication), "id");
     }
 
 }
