@@ -53,7 +53,7 @@ public class LoginService {
      * @return the user that was saved to the DB
      */
     public User saveUser(OAuth2Authentication authentication) {
-        RegistrationService registrationService = getOAuthService(authentication.getOAuth2Request().getClientId());
+        RegistrationService registrationService = this.getOAuthService(authentication.getOAuth2Request().getClientId());
 
         return nonNull(registrationService) ? registrationService.saveUser(authentication) : null;
     }
@@ -66,7 +66,7 @@ public class LoginService {
      * @return the user that is saved to the DB for the authentication
      */
     public User loadUser(OAuth2Authentication authentication) {
-        RegistrationService registrationService = getOAuthService(authentication.getOAuth2Request().getClientId());
+        RegistrationService registrationService = this.getOAuthService(authentication.getOAuth2Request().getClientId());
 
         return nonNull(registrationService) ? registrationService.getUser(authentication) : null;
     }

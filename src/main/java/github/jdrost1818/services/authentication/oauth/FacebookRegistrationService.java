@@ -65,6 +65,9 @@ public class FacebookRegistrationService implements RegistrationService<Facebook
      * @return user's first name
      */
     private String extractFirstName(String fullName) {
+        if (isNull(fullName)) {
+            return "";
+        }
         return fullName.substring(0, fullName.lastIndexOf(" "));
     }
 
@@ -77,6 +80,9 @@ public class FacebookRegistrationService implements RegistrationService<Facebook
      * @return user's last name
      */
     private String extractLastName(String fullName) {
+        if (isNull(fullName)) {
+            return "";
+        }
         return fullName.substring(fullName.lastIndexOf(" ") + 1);
     }
 

@@ -22,11 +22,6 @@ import java.util.UUID;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertNull;
 
-/**
- * @author Jake Drost
- * @version 1.0.0
- * @since 1.0.0
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)
 @WebAppConfiguration
