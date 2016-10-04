@@ -70,7 +70,7 @@ public class LoginService {
 
         if (nonNull(sessionUser.getCurrentUser())) {
             foundUser = sessionUser.getCurrentUser();
-        } else if (principal instanceof OAuth2Authentication) {
+        } else if (nonNull(principal) && principal instanceof OAuth2Authentication) {
             OAuth2Authentication authentication = (OAuth2Authentication) principal;
             foundUser = this.loadUser(authentication);
 

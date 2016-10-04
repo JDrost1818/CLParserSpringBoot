@@ -1,6 +1,7 @@
 package github.jdrost1818.services.authentication;
 
 import github.jdrost1818.ClparserServiceApplication;
+import github.jdrost1818.model.authentication.SessionUser;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.repository.authentication.FacebookUserRepository;
 import github.jdrost1818.repository.authentication.GoogleUserRepository;
@@ -44,6 +45,9 @@ public class TestLoginService {
 
     @Autowired
     private FacebookUserRepository facebookUserRepository;
+
+    @Autowired
+    private SessionUser sessionUser;
 
     private LinkedHashMap<String, Object> details;
 
@@ -117,6 +121,27 @@ public class TestLoginService {
         User userSaved = this.loginService.saveUser(this.facebookAuthentication);
 
         reflectionEquals(userSaved, this.loginService.loadUser(this.facebookAuthentication));
+    }
+
+    @Test
+    public void testGetUserUserIsLoggedIn() {
+        User loggedInUser = new User();
+
+        this.sessionUser.setCurrentUser(loggedInUser);
+        assertEquals(loggedInUser, this.loginService.getUserSaveIfNotPresent(null));
+    }
+
+    @Test
+    public void testUserNotLoggedInNullInput() {
+        assertNull(this.loginService.getUserSaveIfNotPresent(null));
+    }
+
+    @Test
+    public void testUserNotLoggedInOrSaved() {
+        User loggedInUser = this.loginService.getUserSaveIfNotPresent(this.googleAuthentication);
+
+        assertNotNull(loggedInUser);
+        assertTrue(this.googleUserRepository.findAll().iterator().hasNext());
     }
 
 }
