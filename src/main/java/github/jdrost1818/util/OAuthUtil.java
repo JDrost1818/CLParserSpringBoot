@@ -11,6 +11,10 @@ import static java.util.Objects.isNull;
  */
 public class OAuthUtil {
 
+    private OAuthUtil() {
+        // Prevent instantiation
+    }
+
     public static boolean isNullRequest(OAuth2Authentication authentication) {
         return isNull(authentication)
                 || isNull(authentication.getUserAuthentication())

@@ -1,6 +1,8 @@
 package github.jdrost1818.services.authentication;
 
+import github.jdrost1818.model.authentication.SessionUser;
 import github.jdrost1818.model.authentication.User;
+import github.jdrost1818.repository.UserRepository;
 import github.jdrost1818.services.authentication.oauth.FacebookRegistrationService;
 import github.jdrost1818.services.authentication.oauth.GoogleRegistrationService;
 import github.jdrost1818.services.authentication.oauth.RegistrationService;
@@ -11,9 +13,11 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 /**
@@ -31,6 +35,12 @@ public class LoginService {
     private String facebookClientId;
 
     @Autowired
+    protected SessionUser sessionUser;
+
+    @Autowired
+    protected UserRepository userRepository;
+
+    @Autowired
     private GoogleRegistrationService googleRegistrationService;
 
     @Autowired
@@ -45,6 +55,36 @@ public class LoginService {
     public void populateMap() {
         this.clientRegistrationServiceMap.put(googleClientId, googleRegistrationService);
         this.clientRegistrationServiceMap.put(facebookClientId, facebookRegistrationService);
+    }
+
+    /**
+     * Gets the user from the database. If the user is not found in the
+     * database, it will save the user first. This is expected to be used
+     * for OAuth requests
+     *
+     * @param principal holds the user data
+     * @return the {@link User} which is saved in the database
+     */
+    public User getUser(Principal principal) {
+        User foundUser = null;
+
+        if (nonNull(sessionUser.getCurrentUser())) {
+            foundUser = sessionUser.getCurrentUser();
+        } else if (principal instanceof OAuth2Authentication) {
+            OAuth2Authentication authentication = (OAuth2Authentication) principal;
+            foundUser = this.loadUser(authentication);
+
+            // This means we have been able to authenticate
+            // through OAuth, but the user is not yet saved
+            // to the database for this app's use
+            if (isNull(foundUser)) {
+                foundUser = this.saveUser(authentication);
+            }
+        }
+
+        sessionUser.setCurrentUser(foundUser);
+
+        return foundUser;
     }
 
     /**
