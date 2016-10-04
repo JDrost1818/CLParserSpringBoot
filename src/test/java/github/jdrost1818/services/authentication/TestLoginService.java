@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import static junit.framework.TestCase.*;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)
@@ -56,7 +57,7 @@ public class TestLoginService {
     private OAuth2Authentication facebookAuthentication;
 
     @Before
-    public void setup() {
+    public void setUp() {
         /*
             Authentication Set Up
          */
@@ -74,7 +75,7 @@ public class TestLoginService {
     }
 
     @After
-    public void cleanup() {
+    public void tearDown() {
         this.googleUserRepository.deleteAll();
         this.facebookUserRepository.deleteAll();
     }
@@ -113,14 +114,14 @@ public class TestLoginService {
     public void testUserGetsLoadedFromGoogleRepo() {
         User userSaved = this.loginService.saveUser(this.googleAuthentication);
 
-        reflectionEquals(userSaved, this.loginService.loadUser(this.googleAuthentication));
+        assertReflectionEquals(userSaved, this.loginService.loadUser(this.googleAuthentication));
     }
 
     @Test
     public void testUserGetsLoadedFromFacebookRepo() {
         User userSaved = this.loginService.saveUser(this.facebookAuthentication);
 
-        reflectionEquals(userSaved, this.loginService.loadUser(this.facebookAuthentication));
+        assertReflectionEquals(userSaved, this.loginService.loadUser(this.facebookAuthentication));
     }
 
     @Test
