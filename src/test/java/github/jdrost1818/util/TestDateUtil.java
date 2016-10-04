@@ -1,8 +1,8 @@
 package github.jdrost1818.util;
 
-import java.util.Date;
-
 import org.junit.Test;
+
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 

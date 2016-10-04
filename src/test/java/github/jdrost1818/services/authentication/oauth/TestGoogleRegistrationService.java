@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)
@@ -46,7 +47,7 @@ public class TestGoogleRegistrationService {
     private OAuth2Authentication oAuth2Authentication;
 
     @Before
-    public void setup() {
+    public void setUp() {
         /*
             User Set Up
          */
@@ -69,7 +70,7 @@ public class TestGoogleRegistrationService {
     }
 
     @After
-    public void cleanup() {
+    public void tearDown() {
         this.googleUserRepository.deleteAll();
     }
 
@@ -87,7 +88,7 @@ public class TestGoogleRegistrationService {
     @Test
     public void testUserDoesExist() {
         this.details.put("id", this.googleUser.getId());
-        reflectionEquals(this.googleUser, this.googleRegistrationService.getUser(this.oAuth2Authentication));
+        assertTrue(reflectionEquals(this.googleUser, this.googleRegistrationService.getUser(this.oAuth2Authentication)));
     }
 
     @Test
@@ -121,7 +122,7 @@ public class TestGoogleRegistrationService {
         this.details.put("name", nameMap);
 
         // All the properties should be the same except for the id - so we'll ignore that for now
-        reflectionEquals(this.googleUser, this.googleRegistrationService.saveUser(this.oAuth2Authentication), "id", "email");
+        assertTrue(reflectionEquals(this.googleUser, this.googleRegistrationService.saveUser(this.oAuth2Authentication), "id", "email"));
     }
 
     @Test(expected = JpaSystemException.class)

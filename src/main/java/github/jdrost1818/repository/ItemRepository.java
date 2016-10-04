@@ -1,9 +1,8 @@
 package github.jdrost1818.repository;
 
+import github.jdrost1818.model.Item;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
-import github.jdrost1818.model.Item;
 
 /**
  * @author Jake Drost

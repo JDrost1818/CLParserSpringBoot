@@ -1,7 +1,6 @@
 package github.jdrost1818.controller;
 
 import github.jdrost1818.model.authentication.SessionUser;
-import github.jdrost1818.model.authentication.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;

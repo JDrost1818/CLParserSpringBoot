@@ -1,8 +1,8 @@
 package github.jdrost1818.model;
 
-import java.time.LocalDateTime;
-
 import org.junit.Test;
+
+import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

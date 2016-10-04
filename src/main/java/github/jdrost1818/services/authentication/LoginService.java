@@ -66,11 +66,9 @@ public class LoginService {
      * @return the {@link User} which is saved in the database
      */
     public User getUserSaveIfNotPresent(Principal principal) {
-        User foundUser = null;
+        User foundUser = sessionUser.getCurrentUser();
 
-        if (nonNull(sessionUser.getCurrentUser())) {
-            foundUser = sessionUser.getCurrentUser();
-        } else if (nonNull(principal) && principal instanceof OAuth2Authentication) {
+        if (isNull(foundUser) && principal instanceof OAuth2Authentication) {
             OAuth2Authentication authentication = (OAuth2Authentication) principal;
             foundUser = this.loadUser(authentication);
 
@@ -94,10 +92,7 @@ public class LoginService {
      * @return the user that was saved to the DB
      */
     public User saveUser(OAuth2Authentication authentication) {
-        if (OAuthUtil.isNullRequest(authentication)) {
-            return null;
-        }
-        RegistrationService registrationService = this.getOAuthService(authentication.getOAuth2Request().getClientId());
+        RegistrationService registrationService = this.getOAuthService(authentication);
 
         return nonNull(registrationService) ? registrationService.saveUser(authentication) : null;
     }
@@ -110,10 +105,7 @@ public class LoginService {
      * @return the user that is saved to the DB for the authentication
      */
     public User loadUser(OAuth2Authentication authentication) {
-        if (OAuthUtil.isNullRequest(authentication)) {
-            return null;
-        }
-        RegistrationService registrationService = this.getOAuthService(authentication.getOAuth2Request().getClientId());
+        RegistrationService registrationService = this.getOAuthService(authentication);
 
         return nonNull(registrationService) ? registrationService.getUser(authentication) : null;
     }
@@ -121,10 +113,14 @@ public class LoginService {
     /**
      * Determines which {@link RegistrationService} to use for the given client id
      *
-     * @param clientId identifier for our OAuth clients
+     * @param authentication authentication object from an OAuth request
      * @return the registration service for the given OAuth client
      */
-    private RegistrationService getOAuthService(String clientId) {
+    private RegistrationService getOAuthService(OAuth2Authentication authentication) {
+        if (OAuthUtil.isNullRequest(authentication)) {
+            return null;
+        }
+        String clientId = authentication.getOAuth2Request().getClientId();
         return nonNull(clientId) ? this.clientRegistrationServiceMap.get(clientId) : null;
     }
 

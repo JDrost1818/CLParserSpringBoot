@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)
@@ -43,7 +44,7 @@ public class TestFacebookRegistrationService {
     private OAuth2Authentication oAuth2Authentication;
 
     @Before
-    public void setup() {
+    public void setUp() {
         /*
             User Set Up
          */
@@ -65,7 +66,7 @@ public class TestFacebookRegistrationService {
     }
 
     @After
-    public void cleanup() {
+    public void tearDown() {
         this.facebookUserRepository.deleteAll();
     }
 
@@ -83,7 +84,7 @@ public class TestFacebookRegistrationService {
     @Test
     public void testUserDoesExist() {
         this.details.put("id", this.facebookUser.getId());
-        reflectionEquals(this.facebookUser, this.facebookRegistrationService.getUser(this.oAuth2Authentication));
+        assertTrue(reflectionEquals(this.facebookUser, this.facebookRegistrationService.getUser(this.oAuth2Authentication)));
     }
 
     @Test
@@ -109,7 +110,7 @@ public class TestFacebookRegistrationService {
         this.details.put("name", this.user.getFirstName() + " " + this.user.getLastName());
 
         // All the properties should be the same except for the id - so we'll ignore that for now
-        reflectionEquals(this.facebookUser, this.facebookRegistrationService.saveUser(this.oAuth2Authentication), "id");
+        assertTrue(reflectionEquals(this.facebookUser, this.facebookRegistrationService.saveUser(this.oAuth2Authentication), "id"));
     }
 
 }

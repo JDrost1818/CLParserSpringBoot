@@ -1,17 +1,16 @@
 package github.jdrost1818.services;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Objects;
-
+import github.jdrost1818.model.Item;
+import github.jdrost1818.repository.ItemRepository;
+import github.jdrost1818.util.JSoupAddOn;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import github.jdrost1818.model.Item;
-import github.jdrost1818.repository.ItemRepository;
-import github.jdrost1818.util.JSoupAddOn;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static java.util.Objects.isNull;
 

@@ -26,7 +26,6 @@ public interface RegistrationService<T extends UserProvider> {
      * @see RegistrationService#getUser(OAuth2Authentication)
      */
     default User getUser(CrudRepository<T, String> repo, OAuth2Authentication authentication) {
-        User user = null;
         if (nonNull(authentication)) {
             // If the user isn't null, get the details from the authentication
             Object authenticationDetails = authentication.getUserAuthentication().getDetails();
@@ -36,11 +35,11 @@ public interface RegistrationService<T extends UserProvider> {
                 DefaultOAuthResponse response = mapOauthResponse(authenticationDetails, DefaultOAuthResponse.class);
                 UserProvider userProvider = repo.findOne(response.getId());
 
-                user = nonNull(userProvider) ? userProvider.getUser() : null;
+                return nonNull(userProvider) ? userProvider.getUser() : null;
             }
         }
 
-        return user;
+        return null;
     }
 
     /**

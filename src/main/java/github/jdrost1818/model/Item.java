@@ -1,15 +1,14 @@
 package github.jdrost1818.model;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import github.jdrost1818.config.CacheConfig;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import github.jdrost1818.config.CacheConfig;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static java.util.Objects.isNull;
 
