@@ -90,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new ClientResources();
     }
 
-    private static class ClientResources {
+    public static class ClientResources {
 
         @NestedConfigurationProperty
         private AuthorizationCodeResourceDetails client = new AuthorizationCodeResourceDetails();
@@ -98,11 +98,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @NestedConfigurationProperty
         private ResourceServerProperties resource = new ResourceServerProperties();
 
-        AuthorizationCodeResourceDetails getClient() {
+        public AuthorizationCodeResourceDetails getClient() {
             return client;
         }
 
-        ResourceServerProperties getResource() {
+        public ResourceServerProperties getResource() {
             return resource;
         }
 
