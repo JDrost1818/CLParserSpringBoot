@@ -15,7 +15,7 @@ google:
     authenticationScheme: query
     clientAuthenticationScheme: form
     scope: profile email
-    registered-redirect-uri: http://localhost:8888/dashboard
+    registered-redirect-uri: ${OAUTH_REDIRECT_URI}
   resource:
     userInfoUri: https://www.googleapis.com/plus/v1/people/me
 
@@ -28,8 +28,6 @@ facebook:
     tokenName: oauth_token
     authenticationScheme: query
     clientAuthenticationScheme: form
-    registered-redirect-uri: http://localhost:8888/dashboard
+    registered-redirect-uri: ${OAUTH_REDIRECT_URI}
   resource:
     userInfoUri: https://graph.facebook.com/me
-
-
