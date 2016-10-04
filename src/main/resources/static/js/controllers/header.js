@@ -3,7 +3,7 @@ app.directive('header', () => {
         restrict: 'A',
         replace: true,
         templateUrl: "/js/directives/header.html",
-        controller:  ['$scope', '$http', '$window', ($scope, $http, $window) => {
+        controller:  ['$scope', '$http', '$location', ($scope, $http, $location) => {
 
             // Gets the logged in user - if there is one
             $http.get("/user").success(function(data) {
@@ -18,7 +18,7 @@ app.directive('header', () => {
                 $http.post('/logout', {}).success(function() {
                     $scope.user = {};
                     $scope.authenticated = false;
-                    $window.location.href = '/';
+                    $location.path("/");
                 }).error(function(data) {
                     $scope.authenticated = false;
                 });
