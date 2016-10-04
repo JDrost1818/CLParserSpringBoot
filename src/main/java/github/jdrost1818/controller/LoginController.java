@@ -13,13 +13,13 @@ import java.security.Principal;
  */
 @RestController
 public class LoginController {
-    
+
     @Autowired
     protected LoginService registrationService;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public Principal getUser(Principal principal) {
-        return registrationService.getUser(principal);
+        return registrationService.getUserSaveIfNotPresent(principal);
     }
 
 }

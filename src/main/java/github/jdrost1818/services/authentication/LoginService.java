@@ -65,7 +65,7 @@ public class LoginService {
      * @param principal holds the user data
      * @return the {@link User} which is saved in the database
      */
-    public User getUser(Principal principal) {
+    public User getUserSaveIfNotPresent(Principal principal) {
         User foundUser = null;
 
         if (nonNull(sessionUser.getCurrentUser())) {
