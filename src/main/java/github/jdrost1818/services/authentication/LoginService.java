@@ -4,6 +4,7 @@ import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.services.authentication.oauth.FacebookRegistrationService;
 import github.jdrost1818.services.authentication.oauth.GoogleRegistrationService;
 import github.jdrost1818.services.authentication.oauth.RegistrationService;
+import github.jdrost1818.util.OAuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -53,6 +54,9 @@ public class LoginService {
      * @return the user that was saved to the DB
      */
     public User saveUser(OAuth2Authentication authentication) {
+        if (OAuthUtil.isNullRequest(authentication)) {
+            return null;
+        }
         RegistrationService registrationService = this.getOAuthService(authentication.getOAuth2Request().getClientId());
 
         return nonNull(registrationService) ? registrationService.saveUser(authentication) : null;
@@ -66,6 +70,9 @@ public class LoginService {
      * @return the user that is saved to the DB for the authentication
      */
     public User loadUser(OAuth2Authentication authentication) {
+        if (OAuthUtil.isNullRequest(authentication)) {
+            return null;
+        }
         RegistrationService registrationService = this.getOAuthService(authentication.getOAuth2Request().getClientId());
 
         return nonNull(registrationService) ? registrationService.getUser(authentication) : null;
@@ -78,7 +85,7 @@ public class LoginService {
      * @return the registration service for the given OAuth client
      */
     private RegistrationService getOAuthService(String clientId) {
-        return this.clientRegistrationServiceMap.get(clientId);
+        return nonNull(clientId) ? this.clientRegistrationServiceMap.get(clientId) : null;
     }
 
 }

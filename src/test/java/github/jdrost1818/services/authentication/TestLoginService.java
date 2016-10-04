@@ -76,6 +76,16 @@ public class TestLoginService {
     }
 
     @Test
+    public void testLoadNullRequest() {
+        assertNull(this.loginService.loadUser(null));
+    }
+
+    @Test
+    public void testSaveNullRequest() {
+        assertNull(this.loginService.saveUser(null));
+    }
+
+    @Test
     public void testUserGetsSavedToGoogleRepo() {
         assertFalse(this.googleUserRepository.findAll().iterator().hasNext());
 

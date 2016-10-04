@@ -4,6 +4,7 @@ import github.jdrost1818.model.authentication.FacebookOAuthUserDetails;
 import github.jdrost1818.model.authentication.FacebookUser;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.repository.authentication.FacebookUserRepository;
+import github.jdrost1818.util.OAuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
@@ -36,9 +37,7 @@ public class FacebookRegistrationService implements RegistrationService<Facebook
     @Override
     public User saveUser(OAuth2Authentication authentication) {
         // Early exit on null input
-        if (isNull(authentication)
-                || isNull(authentication.getUserAuthentication())
-                || isNull(authentication.getUserAuthentication().getDetails())) {
+        if (OAuthUtil.isNullRequest(authentication)) {
             return null;
         }
 
