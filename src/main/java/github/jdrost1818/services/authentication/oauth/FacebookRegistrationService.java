@@ -2,20 +2,13 @@ package github.jdrost1818.services.authentication.oauth;
 
 import github.jdrost1818.model.authentication.FacebookOAuthUserDetails;
 import github.jdrost1818.model.authentication.FacebookUser;
-import github.jdrost1818.model.authentication.GoogleUser;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.repository.authentication.FacebookRepository;
-import github.jdrost1818.repository.authentication.GoogleUserRepository;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
-import static java.util.Objects.nonNull;
 
 /**
  * @author Jake Drost
@@ -57,7 +50,7 @@ public class FacebookRegistrationService implements RegistrationService<Facebook
 
     /**
      * Extracts the first name of the user's full concatenated name
-     *
+     * <p>
      * NOTE: assumes all words but the last is the first name
      *
      * @param fullName first and last name combined
@@ -69,7 +62,7 @@ public class FacebookRegistrationService implements RegistrationService<Facebook
 
     /**
      * Extracts the last name of the user's full concatenated name
-     *
+     * <p>
      * NOTE: assumes the last word is the last name
      *
      * @param fullName first and last name combined
