@@ -4,11 +4,11 @@ import github.jdrost1818.model.authentication.FacebookOAuthUserDetails;
 import github.jdrost1818.model.authentication.FacebookUser;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.repository.authentication.FacebookRepository;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
+
+import static github.jdrost1818.util.ObjectMapperUtil.mapOauthResponse;
 
 /**
  * @author Jake Drost
@@ -20,8 +20,6 @@ public class FacebookRegistrationService implements RegistrationService<Facebook
 
     @Autowired
     protected FacebookRepository facebookUserRepository;
-
-    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     /**
      * {@inheritDoc}
@@ -36,7 +34,7 @@ public class FacebookRegistrationService implements RegistrationService<Facebook
      */
     @Override
     public User saveUser(OAuth2Authentication authentication) {
-        FacebookOAuthUserDetails userDetails = this.objectMapper.convertValue(
+        FacebookOAuthUserDetails userDetails = mapOauthResponse(
                 authentication.getUserAuthentication().getDetails(), FacebookOAuthUserDetails.class);
 
         User userToSave = new User();

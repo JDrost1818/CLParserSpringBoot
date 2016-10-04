@@ -4,11 +4,14 @@ import github.jdrost1818.model.authentication.GoogleOAuthUserDetails;
 import github.jdrost1818.model.authentication.GoogleUser;
 import github.jdrost1818.model.authentication.User;
 import github.jdrost1818.repository.authentication.GoogleUserRepository;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import static github.jdrost1818.util.ObjectMapperUtil.mapOauthResponse;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
  * @author Jake Drost
@@ -20,8 +23,6 @@ public class GoogleRegistrationService implements RegistrationService<GoogleUser
 
     @Autowired
     protected GoogleUserRepository googleUserRepository;
-
-    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     /**
      * {@inheritDoc}
@@ -36,16 +37,33 @@ public class GoogleRegistrationService implements RegistrationService<GoogleUser
      */
     @Override
     public User saveUser(OAuth2Authentication authentication) {
-        GoogleOAuthUserDetails userDetails = objectMapper.convertValue(authentication.getUserAuthentication().getDetails(), GoogleOAuthUserDetails.class);
+        // Early exit on null input
+        if (isNull(authentication)
+                || isNull(authentication.getUserAuthentication())
+                || isNull(authentication.getUserAuthentication().getDetails())) {
+            return null;
+        }
+
+        // Map the response into a google response-specific object
+        Object userDetailMap = authentication.getUserAuthentication().getDetails();
+        GoogleOAuthUserDetails userDetails = mapOauthResponse(userDetailMap, GoogleOAuthUserDetails.class);
+
+        // Extract the properties from the parsed response
         User userToSave = new User();
+        if (isNull(userDetails.getId())) {
+            return null;
+        }
+        if (nonNull(userDetails.getName())) {
+            userToSave.setFirstName(userDetails.getName().getGivenName());
+            userToSave.setLastName(userDetails.getName().getFamilyName());
+        }
+        if (!CollectionUtils.isEmpty(userDetails.getEmails())) {
+            userToSave.setEmail(userDetails.getEmails().get(0).getValue());
+        }
 
-        userToSave.setFirstName(userDetails.getName().getGivenName());
-        userToSave.setLastName(userDetails.getName().getFamilyName());
-        userToSave.setEmail(userDetails.getEmails().get(0).getValue());
-
-        GoogleUser googleUser = new GoogleUser(userDetails.getId(), userToSave);
-
-        return googleUserRepository.save(googleUser).getUser();
+        GoogleUser googleUserToSave = new GoogleUser(userDetails.getId(), userToSave);
+        googleUserToSave = this.googleUserRepository.save(googleUserToSave);
+        return googleUserToSave.getUser();
     }
 
 }
