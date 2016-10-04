@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)
@@ -84,7 +86,7 @@ public class TestFacebookRegistrationService {
     @Test
     public void testUserDoesExist() {
         this.details.put("id", this.facebookUser.getId());
-        assertTrue(reflectionEquals(this.facebookUser, this.facebookRegistrationService.getUser(this.oAuth2Authentication)));
+        assertReflectionEquals(this.facebookUser.getUser(), this.facebookRegistrationService.getUser(this.oAuth2Authentication));
     }
 
     @Test
@@ -110,7 +112,7 @@ public class TestFacebookRegistrationService {
         this.details.put("name", this.user.getFirstName() + " " + this.user.getLastName());
 
         // All the properties should be the same except for the id - so we'll ignore that for now
-        assertTrue(reflectionEquals(this.facebookUser, this.facebookRegistrationService.saveUser(this.oAuth2Authentication), "id"));
+        assertReflectionEquals(this.user, this.facebookRegistrationService.saveUser(this.oAuth2Authentication), ReflectionComparatorMode.IGNORE_DEFAULTS);
     }
 
 }

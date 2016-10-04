@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.unitils.reflectionassert.ReflectionComparatorMode;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -23,8 +24,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)
@@ -88,7 +91,7 @@ public class TestGoogleRegistrationService {
     @Test
     public void testUserDoesExist() {
         this.details.put("id", this.googleUser.getId());
-        assertTrue(reflectionEquals(this.googleUser, this.googleRegistrationService.getUser(this.oAuth2Authentication)));
+        assertReflectionEquals(this.googleUser.getUser(), this.googleRegistrationService.getUser(this.oAuth2Authentication));
     }
 
     @Test
@@ -115,14 +118,16 @@ public class TestGoogleRegistrationService {
         nameMap.put("familyName", this.user.getLastName());
 
         Map<String, String> emailMap = new LinkedHashMap<>();
-        emailMap.put("value", UUID.randomUUID() + this.user.getEmail()); // emails need to be unique in the db
+        String email = UUID.randomUUID().toString();
+        emailMap.put("value", email); // emails need to be unique in the db
+        this.user.setEmail(email);
 
         this.details.put("id", UUID.randomUUID());
         this.details.put("emails", Collections.singletonList(emailMap));
         this.details.put("name", nameMap);
 
         // All the properties should be the same except for the id - so we'll ignore that for now
-        assertTrue(reflectionEquals(this.googleUser, this.googleRegistrationService.saveUser(this.oAuth2Authentication), "id", "email"));
+        assertReflectionEquals(this.user, this.googleRegistrationService.saveUser(this.oAuth2Authentication), ReflectionComparatorMode.IGNORE_DEFAULTS);
     }
 
     @Test(expected = JpaSystemException.class)
