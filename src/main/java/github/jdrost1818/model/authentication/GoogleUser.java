@@ -1,5 +1,7 @@
 package github.jdrost1818.model.authentication;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -7,6 +9,7 @@ import javax.persistence.*;
  * @version 1.0.0
  * @since 1.0.0
  */
+@Data
 @Entity
 @Table(name = "GOOGLE_USERS")
 public class GoogleUser implements UserProvider {
@@ -27,20 +30,4 @@ public class GoogleUser implements UserProvider {
         this.user = user;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

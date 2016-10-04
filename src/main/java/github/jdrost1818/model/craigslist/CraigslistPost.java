@@ -1,5 +1,6 @@
 package github.jdrost1818.model.craigslist;
 
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Element;
@@ -19,6 +20,7 @@ import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
  * @version 1.0.0
  * @since 1.0.0
  */
+@Data
 @Entity
 @Table(name = "CRAIGSLIST_POST")
 public class CraigslistPost {
@@ -57,7 +59,7 @@ public class CraigslistPost {
 
         Elements priceElement = htmlElement.select("a span.price");
         if (!CollectionUtils.isEmpty(priceElement)) {
-            newPost.setPrice(priceElement.text());
+            newPost.setPriceByString(priceElement.text());
         }
 
         Element detailElement = htmlElement.select("span.txt").get(0);
@@ -80,105 +82,9 @@ public class CraigslistPost {
         return newPost;
     }
 
-    private void setPrice(String priceString) {
+    private void setPriceByString(String priceString) {
         if (!"".equals(priceString))
             setPrice(Integer.parseInt(priceString.replace("$", "")));
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
-
-    public Date getDatePosted() {
-        return new Date(datePosted.getTime());
-    }
-
-    public void setDatePosted(Date datePosted) {
-        this.datePosted = new Date(datePosted.getTime());
-    }
-
-    public Date getDateUpdated() {
-        return new Date(dateUpdated.getTime());
-    }
-
-    public void setDateUpdated(Date dateUpdated) {
-        this.dateUpdated = new Date(dateUpdated.getTime());
-    }
-
-    public Date getDateCached() {
-        return new Date(dateCached.getTime());
-    }
-
-    public void setDateCached(Date dateCached) {
-        this.dateCached = new Date(dateCached.getTime());
     }
 
     public boolean deepEquals(CraigslistPost otherPost) {

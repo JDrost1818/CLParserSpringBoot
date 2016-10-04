@@ -1,6 +1,7 @@
 package github.jdrost1818.model;
 
 import github.jdrost1818.config.CacheConfig;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ import static java.util.Objects.isNull;
  * @version 1.0.0
  * @since 1.0.0
  */
+@Data
 @Entity
 @Table(name = "ITEM_CACHE")
 public class Item implements Serializable {
@@ -36,38 +38,14 @@ public class Item implements Serializable {
     }
 
     public Item(String name) {
-        setName(name);
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public LocalDateTime getDateCached() {
-        return dateCached;
-    }
-
-    public void setDateCached(LocalDateTime dateCached) {
-        this.dateCached = dateCached;
-    }
-
     public boolean isStillValid() {
-        if (isNull(getDateCached())) {
+        if (isNull(this.dateCached)) {
             return false;
         }
         LocalDateTime oldestValidCacheDate = LocalDateTime.now().minusDays(CacheConfig.DAYS_TO_CACHE);
-        return oldestValidCacheDate.isBefore(getDateCached());
+        return oldestValidCacheDate.isBefore(this.dateCached);
     }
 }
