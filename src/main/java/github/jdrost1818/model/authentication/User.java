@@ -5,7 +5,9 @@ import java.security.Principal;
 import java.util.Date;
 
 /**
- * Created by JAD0911 on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Entity
 @Table(name = "USERS")

@@ -11,7 +11,9 @@ import static java.util.Objects.isNull;
  * the app. Essentially, if as a programmer, you need to manipulate/get
  * a date, that action should occur in this class
  *
- * Created by JAD0911 on 3/29/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public final class DateUtil {
 

@@ -3,7 +3,9 @@ package github.jdrost1818.model;
 import javax.persistence.*;
 
 /**
- * Created by JAD0911 on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Entity
 @Table(name = "SEARCH_CRITERIA")

@@ -1,7 +1,9 @@
 package github.jdrost1818.model.authentication;
 
 /**
- * Created by daugherty on 10/3/16.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class FacebookOAuthUserDetails {
 

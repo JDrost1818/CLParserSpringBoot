@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * Created by JAD0911 on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Controller
 public class StaticController {

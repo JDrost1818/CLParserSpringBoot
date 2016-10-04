@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 /**
- * Created by daugherty on 9/28/16.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @RestController
 public class LoginController {

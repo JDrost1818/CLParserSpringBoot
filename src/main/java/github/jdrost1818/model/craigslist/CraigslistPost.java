@@ -17,7 +17,9 @@ import org.springframework.util.CollectionUtils;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 
 /**
- * Created by JAD0911 on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Entity
 @Table(name = "CRAIGSLIST_POST")

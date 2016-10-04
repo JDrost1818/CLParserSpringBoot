@@ -27,7 +27,9 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Created by Jake on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)

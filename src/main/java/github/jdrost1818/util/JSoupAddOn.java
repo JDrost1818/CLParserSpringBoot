@@ -14,7 +14,9 @@ import org.jsoup.select.Elements;
  * Contains tools to make interfacing with the Jsoup API
  * easier when using it in this project
  *
- * Created by JAD0911 on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public final class JSoupAddOn {
 

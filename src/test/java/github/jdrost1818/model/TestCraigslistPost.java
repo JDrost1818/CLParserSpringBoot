@@ -21,7 +21,9 @@ import github.jdrost1818.data.CraigslistConstants;
 import github.jdrost1818.model.craigslist.CraigslistPost;
 
 /**
- * Created by Jake on 3/26/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class TestCraigslistPost {
 

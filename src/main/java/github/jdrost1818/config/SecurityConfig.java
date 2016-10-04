@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by daugherty on 10/3/16.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -31,19 +34,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     OAuth2ClientContext oauth2ClientContext;
 
+    private static final String LOGIN_PAGE = "/welcome";
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/welcome/**", "/webjars/**", "/css/**", "/user").permitAll()
-                .anyRequest().authenticated().and()
-                .formLogin()
-                    .loginPage("/welcome")
-                    .loginProcessingUrl("/welcome")
-                    .failureUrl("/welcome?error")
+                .antMatchers("/", LOGIN_PAGE + "/**", "/webjars/**", "/css/**", "/user").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage(LOGIN_PAGE).loginProcessingUrl(LOGIN_PAGE).failureUrl(LOGIN_PAGE + "?error")
                 .and()
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
-                .logout().logoutSuccessUrl("/welcome").permitAll().and()
+                .logout().logoutSuccessUrl(LOGIN_PAGE).permitAll()
+                .and()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
     }
@@ -51,20 +55,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private Filter ssoFilter() {
         CompositeFilter filter = new CompositeFilter();
         List<Filter> filters = new ArrayList<>();
-
-        OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
-        OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), oauth2ClientContext);
-        facebookFilter.setRestTemplate(facebookTemplate);
-        facebookFilter.setTokenServices(new UserInfoTokenServices(facebookResource().getUserInfoUri(), facebook().getClientId()));
-        filters.add(facebookFilter);
-
-        OAuth2ClientAuthenticationProcessingFilter googleFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/google");
-        OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google(), oauth2ClientContext);
-        googleFilter.setRestTemplate(googleTemplate);
-        googleFilter.setTokenServices(new UserInfoTokenServices(googleResource().getUserInfoUri(), google().getClientId()));
-        filters.add(googleFilter);
-
+        filters.add(ssoFilter(facebook(), "/login/facebook"));
+        filters.add(ssoFilter(google(), "/login/google"));
         filter.setFilters(filters);
+        return filter;
+    }
+
+    private Filter ssoFilter(ClientResources client, String path) {
+        OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(path);
+        OAuth2RestTemplate template = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
+        filter.setRestTemplate(template);
+        filter.setTokenServices(new UserInfoTokenServices(
+                client.getResource().getUserInfoUri(), client.getClient().getClientId()));
         return filter;
     }
 
@@ -77,26 +79,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @ConfigurationProperties("google.client")
-    public AuthorizationCodeResourceDetails google() {
-        return new AuthorizationCodeResourceDetails();
+    @ConfigurationProperties("google")
+    public ClientResources google() {
+        return new ClientResources();
     }
 
     @Bean
-    @ConfigurationProperties("google.resource")
-    public ResourceServerProperties googleResource() {
-        return new ResourceServerProperties();
+    @ConfigurationProperties("facebook")
+    public ClientResources facebook() {
+        return new ClientResources();
     }
 
-    @Bean
-    @ConfigurationProperties("facebook.client")
-    public AuthorizationCodeResourceDetails facebook() {
-        return new AuthorizationCodeResourceDetails();
+    private static class ClientResources {
+
+        @NestedConfigurationProperty
+        private AuthorizationCodeResourceDetails client = new AuthorizationCodeResourceDetails();
+
+        @NestedConfigurationProperty
+        private ResourceServerProperties resource = new ResourceServerProperties();
+
+        AuthorizationCodeResourceDetails getClient() {
+            return client;
+        }
+
+        ResourceServerProperties getResource() {
+            return resource;
+        }
+
     }
 
-    @Bean
-    @ConfigurationProperties("facebook.resource")
-    public ResourceServerProperties facebookResource() {
-        return new ResourceServerProperties();
-    }
 }

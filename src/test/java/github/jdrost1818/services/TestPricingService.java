@@ -18,7 +18,9 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 /**
- * Created by JAD0911 on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ClparserServiceApplication.class)
