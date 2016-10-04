@@ -1,0 +1,59 @@
+<div id="login-wrapper" class="row">
+    <div id="login-backdrop" class="col-xs-3">
+
+        <!-- HEADER -->
+        <div id="login-signup-switcher" class="row clickable">
+            <div id="login-toggle" class="col-xs-6" ng-class="{deselected: !isLoggingIn}" ng-click="switchLoginType(true)">
+                <h3 class="text-center">Login</h3>
+            </div>
+            <div id="signup-toggle" class="col-xs-6" ng-class="{deselected: isLoggingIn}" ng-click="switchLoginType(false)">
+                <h3 class="text-center">Sign Up</h3>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div id="login-content-wrapper" class="row">
+            <div id="login-content-padder" class="col-xs-10 col-xs-offset-1">
+
+                <div id="login-title" class="row">
+                    <p>This is some random text</p>
+                </div>
+
+                <div id="login-form-wrapper" class="row">
+                    <form id="login-form">
+
+                        <!-- EMAIL INPUT -->
+                        <div class="form-group">
+                            <input id="login-username" class="login-input" type="text" placeholder="Email" />
+                        </div>
+
+                        <!-- PASSWORD INPUT -->
+                        <div class="form-group">
+                            <input id="login-password" class="login-input" type="password" placeholder="Password" />
+                        </div>
+
+                        <!-- PASSWORD CONFIRM BTN -->
+                        <div class="form-group" ng-show="!isLoggingIn">
+                            <input id="login-password-confirm" class="login-input" type="password" placeholder="Confirm" />
+                        </div>
+
+                        <!-- SUBMIT BUTTON -->
+                        <div class="form-group">
+                            <button id="login-submit-btn" class="btn btn-primary">Submit</button>
+                        </div>
+
+                        <hr class="" />
+
+                        <!-- OAUTH PROVIDERS -->
+                        <div class="form-group">
+                            <a href="/login/google" class="pure-button socicon-button btn-primary">
+                                <span class="socicon socicon-googleplus"></span>Login With Google</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

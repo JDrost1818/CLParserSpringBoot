@@ -27,7 +27,9 @@ import static java.util.Objects.isNull;
  *
  * However, further progress may be made to include other sources in addition.
  *
- * Created by JAD0911 on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Component
 public class PricingService {

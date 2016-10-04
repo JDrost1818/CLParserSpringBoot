@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Created by Jake on 3/28/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public final class StringUtil {
 

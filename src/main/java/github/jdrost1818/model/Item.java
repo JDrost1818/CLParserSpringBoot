@@ -14,10 +14,12 @@ import github.jdrost1818.config.CacheConfig;
 import static java.util.Objects.isNull;
 
 /**
- * Created by JAD0911 on 3/24/2016.
- * <p>
  * Tasked with representing items which can be bought
  * through Craigslist (or potentially any service)
+ *
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Entity
 @Table(name = "ITEM_CACHE")

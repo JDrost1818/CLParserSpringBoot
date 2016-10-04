@@ -5,11 +5,12 @@
             <img src="./images/initial-logo.png" height="70" style="margin: 15px 25px;">
         </div>
 
-        <div id="header-nav-wrapper" class="col-xs-4 col-xs-offset-6">
+        <div id="header-nav-wrapper" class="col-xs-10" ng-show="authenticated">
             <nav>
-                <p>
-                    This is a header - YAY! - {{ headerText }}
-                </p>
+                <ul id="nav-item-list" ng-show="authenticated">
+                    <li class="nav-item" ng-click="logout()">Logout</li>
+                    <li class="nav-item">Hello, {{ user.firstName }}</li>
+                </ul>
             </nav>
         </div>
 

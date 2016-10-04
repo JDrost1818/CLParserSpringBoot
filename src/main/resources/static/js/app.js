@@ -9,6 +9,14 @@ app.config(function($routeProvider){
             templateUrl: '/views/roles.html',
             controller: 'rolesController'
         })
+        .when('/login',{
+            templateUrl: '/views/login.html',
+            controller: 'loginController'
+        })
+        .when('/signup',{
+            templateUrl: 'views/login.html',
+            controller: 'loginController'
+        })
         .otherwise(
             { redirectTo: '/'}
         );

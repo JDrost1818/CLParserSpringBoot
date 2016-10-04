@@ -31,7 +31,9 @@ import github.jdrost1818.util.StringUtil;
  * to limit the number of hits on the Craigslist servers (prevents getting ip banned) and
  * to achieve performance gains.
  *
- * Created by JAD0911 on 3/24/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @Component
 public class CraigslistService {

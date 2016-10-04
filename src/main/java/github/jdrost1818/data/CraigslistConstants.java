@@ -3,7 +3,9 @@ package github.jdrost1818.data;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
- * Created by Jake on 3/26/2016.
+ * @author Jake Drost
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public final class CraigslistConstants {
 
