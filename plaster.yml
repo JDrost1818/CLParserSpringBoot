@@ -1,0 +1,6 @@
+property:
+  enablePrimitives: true
+  enableRestDocumentationTesting: true
+
+directory:
+  service: services/
